@@ -26,8 +26,8 @@ public class Link {
 		return linkProperties;
 	}
 
-	public void setLinkProperties(ArrayList<LinkProperties> linkProperties) {
-		this.linkProperties = linkProperties;
+	public void setLinkProperties(LinkProperties linkProperties) {
+		this.linkProperties.add(linkProperties);
 	}
 
 	public String getName() {
@@ -36,5 +36,10 @@ public class Link {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public String toString(){
+		return "Link [Direction=" + direction + " | Name " + name + " | properties " + linkProperties + "]";
 	}
 }

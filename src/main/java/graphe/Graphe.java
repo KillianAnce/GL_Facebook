@@ -1,5 +1,7 @@
 package graphe;
 
+import java.nio.file.LinkPermission;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -11,31 +13,40 @@ import java.util.Stack;
 
 public class Graphe {
 	
-	private Map<Vertex, Set<Vertex>> children;
+	private Set<Vertex> children;
 
     public Graphe (){
-        this.children = new HashMap<Vertex, Set<Vertex>>();
+        this.children = new HashSet<Vertex>();
     }
     
     public void addVertex(Vertex v) {
-    	children.putIfAbsent(v, new HashSet<Vertex>());
+        children.add(v);
     }
     
     public void addSingleEdge(Vertex v1, Vertex v2) {
-    	children.get(v1).add(v2);
-    	v2.setParents(v1);
+        // children.get(v1).add(v2);
+        v1.setChildren(v2);
+        v2.setParents(v1);
+        v2.setLink(new Link(">", null, "Friend"));
     }
     
-    public void addMutualEdge(Vertex l1, Vertex l2) {
-    	children.get(l1).add(l2);
-    	children.get(l2).add(l1);
+    public void addMutualEdge(Vertex v1, Vertex v2) {
+    	// children.get(l1).add(l2);
+        // children.get(l2).add(l1);
+        v1.setChildren(v2);
+        v2.setChildren(v1);
+        v1.setParents(v2);
+        v2.setParents(v1);
+        v1.setLink(new Link(">", null, "Friend"));
+        v2.setLink(new Link(">", null, "Friend"));
     }
     
-    public Set<String> depthFirstTraversal(Vertex root) {
+    public Set<String> depthFirstTraversal(Vertex root, int l) {
         Set<String> visited = new LinkedHashSet<String>();
         Stack<Vertex> stack = new Stack<Vertex>();
         stack.push(root);
-        while (!stack.isEmpty()) {
+        int i = 0;
+        while (!stack.isEmpty() && i<l) {
             Vertex vertex = stack.pop();
             if (!visited.contains(vertex.getLabel())) {
                 visited.add(vertex.getLabel());
@@ -43,6 +54,7 @@ public class Graphe {
                     stack.push(v);
                 }
             }
+            i++;
         }
         return visited;
     }
@@ -64,11 +76,11 @@ public class Graphe {
         return visited;
     }
     
-    Set<Vertex> getAdjVerticesOfVertex(Vertex v) {
-        return children.get(v);
+    public Set<Vertex> getAdjVerticesOfVertex(Vertex v) {
+        return v.getChildren();
     }
 
-	public Map<Vertex, Set<Vertex>> getAdjVertices() {
-		return this.children;
-	}
+    public Set<Vertex> getAdjVertices(){
+        return this.children;
+    }
 }
