@@ -7,14 +7,14 @@ public class Link {
 	private Vertex source;
 	private String direction;
 	private ArrayList<LinkProperties> linkProperties;
-	private String name;
+	private String relation;
 	private Vertex destination;
 	
-	public Link(Vertex source, String direction, ArrayList<LinkProperties> properties, String name, Vertex destination) {
+	public Link(Vertex source, String direction, ArrayList<LinkProperties> properties, String relation, Vertex destination) {
 		this.source = source;
 		this.direction = direction;
 		this.linkProperties = properties;
-		this.name = name;
+		this.relation = relation;
 		this.destination = destination;
 	}
 	
@@ -34,12 +34,12 @@ public class Link {
 		this.linkProperties.add(linkProperties);
 	}
 
-	public String getName() {
-		return name;
+	public String getRelation() {
+		return relation;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setRelation(String name) {
+		this.relation = name;
 	}
 
     /**

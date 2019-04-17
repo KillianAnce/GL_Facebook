@@ -68,7 +68,7 @@ public class GrapheTest {
 		g.addVertex(v2);
 		g.addSingleEdge(v, v1, ">", null, "friend");
 		g.addSingleEdge(v1, v2, ">", null, "friend");
-		assertEquals(g.depthFirstTraversal(v,2).contains(v2), true);
+		assertEquals(g.depthFirstTraversal("Barbara",2,"friend").contains(v2), true);
 	}
 	
 	@SuppressWarnings("unlikely-arg-type")

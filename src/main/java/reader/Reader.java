@@ -22,7 +22,7 @@ public class Reader {
         this.f = new File(f);
     }
 
-    public void read() throws IOException {
+    public Graphe read() throws IOException {
         Graphe g = new Graphe();
         BufferedReader br = new BufferedReader(new FileReader(this.f));
         String line;
@@ -82,12 +82,11 @@ public class Reader {
                     default:
                         // nothing
                 }
-                
-                System.out.println(g.toString());
             } else {
                 // nothing
             }
         }
         br.close();
+        return g;
     }
 }

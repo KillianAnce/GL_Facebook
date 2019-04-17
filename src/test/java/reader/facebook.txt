@@ -1,3 +1,4 @@
 Barbara:employeof:role=secretaire;since=2017-->:BigCO
 Barbara:friend:-->:Annette
 Jean:friend:since=1999;shared=book,music-->:Carol
+Jean:friend:-->:Barbara
