@@ -52,6 +52,6 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "Vertex [label=" + label + "]";
+		return "Vertex [label=" + label + " Link : " + link + "]";
 	}
 }

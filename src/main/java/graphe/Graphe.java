@@ -13,21 +13,31 @@ import java.util.Stack;
 
 public class Graphe {
 	
-	private Set<Vertex> children;
+	private Set<Vertex> vertices;
 
     public Graphe (){
-        this.children = new HashSet<Vertex>();
+        this.vertices = new HashSet<Vertex>();
     }
     
-    public void addVertex(Vertex v) {
-        children.add(v);
+    public Vertex addVertex(Vertex v) {
+        Boolean contains = false;
+        for (Vertex vertex : vertices){
+            if (vertex.getLabel().equals(v.getLabel())){
+                contains = true;
+                return vertex;
+            }
+        }
+        if (!contains){
+            vertices.add(v);
+        }
+        return null;
     }
     
-    public void addSingleEdge(Vertex v1, Vertex v2) {
+    public void addSingleEdge(Vertex v1, Vertex v2, String direction, ArrayList<LinkProperties> l, String name) {
         // children.get(v1).add(v2);
         v1.setChildren(v2);
         v2.setParents(v1);
-        v2.setLink(new Link(">", null, "Friend"));
+        v2.setLink(new Link(">", l, "Friend"));
     }
     
     public void addMutualEdge(Vertex v1, Vertex v2) {
@@ -37,7 +47,9 @@ public class Graphe {
         v2.setChildren(v1);
         v1.setParents(v2);
         v2.setParents(v1);
-        v1.setLink(new Link(">", null, "Friend"));
+        Link l = new Link(">", null, "Friend");
+        l.setLinkProperties(null); 
+        v1.setLink(l);
         v2.setLink(new Link(">", null, "Friend"));
     }
     
@@ -81,6 +93,11 @@ public class Graphe {
     }
 
     public Set<Vertex> getAdjVertices(){
-        return this.children;
+        return this.vertices;
+    }
+
+    @Override
+    public String toString(){
+        return "Graphe : " + vertices;
     }
 }

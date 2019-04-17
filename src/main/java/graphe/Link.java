@@ -8,9 +8,9 @@ public class Link {
 	private ArrayList<LinkProperties> linkProperties;
 	private String name;
 	
-	public Link(String direction, ArrayList<LinkProperties> linkProperties, String name) {
+	public Link(String direction, ArrayList<LinkProperties> properties, String name) {
 		this.direction = direction;
-		this.linkProperties = linkProperties;
+		this.linkProperties = properties;
 		this.name = name;
 	}
 	

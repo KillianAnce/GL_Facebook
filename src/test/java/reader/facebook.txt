@@ -1,0 +1,3 @@
+Barbara:friend:since=1999-->:Carol
+Barbara:friend:-->:Annette
+Jean:friend:since=1999;shared=book,music-->:Carol

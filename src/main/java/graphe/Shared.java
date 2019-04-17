@@ -1,3 +1,4 @@
+package graphe;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -5,21 +6,15 @@ public class Shared extends LinkProperties {
     
     private Set<String> shared;
     
-    public Shared(Set<String> shared){
+    public Shared(){
         super("Shared");
-        this.shared = shared;
+        this.shared = new HashSet<String>();
     }
 
-    /**
-     * @return Set<String> return the shared
-     */
     public Set<String> getShared() {
         return shared;
     }
 
-    /**
-     * @param shared the shared to set
-     */
     public void setShared(String shared) {
         this.shared.add(shared);
     }

@@ -39,7 +39,7 @@ public class GrapheTest {
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
 		g.addVertex(v1);
-		g.addSingleEdge(v, v1);
+		g.addSingleEdge(v, v1, ">", null, "friend");
 		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), true);
 		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), false);
 	}
@@ -66,8 +66,8 @@ public class GrapheTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addVertex(v2);
-		g.addSingleEdge(v, v1);
-		g.addSingleEdge(v1, v2);
+		g.addSingleEdge(v, v1, ">", null, "friend");
+		g.addSingleEdge(v1, v2, ">", null, "friend");
 		assertEquals(g.depthFirstTraversal(v,2).contains(v2), true);
 	}
 	
@@ -81,7 +81,7 @@ public class GrapheTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addVertex(v2);
-		g.addSingleEdge(v, v1);
+		g.addSingleEdge(v, v1, ">", null, "friend");
 		assertEquals(g.depthFirstTraversal(v,2).contains(v2), false);
 		assertEquals(g.breadthFirstTraversal(v).contains(v2), false);
 	}
