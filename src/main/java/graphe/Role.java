@@ -23,4 +23,9 @@ public class Role extends LinkProperties {
         this.role = role;
     }
 
+    @Override
+    public String toString(){
+        return "Role : " + role;
+    }
+
 }

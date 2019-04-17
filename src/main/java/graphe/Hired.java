@@ -1,27 +1,31 @@
 package graphe;
-import java.util.Date;
 
 public class Hired extends LinkProperties {
 
-    private Date d;
+    private String date;
 
-    public Hired(Date d){
+    public Hired(String date){
         super("Hired");
-        this.d = d;
+        this.date = date;
     }
 
     /**
      * @return Date return the d
      */
-    public Date getD() {
-        return d;
+    public String getD() {
+        return date;
     }
 
     /**
      * @param d the d to set
      */
-    public void setD(Date d) {
-        this.d = d;
+    public void setD(String date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString(){
+        return "Hired : " + date;
     }
 
 }

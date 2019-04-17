@@ -23,4 +23,9 @@ public class Since extends LinkProperties {
         this.value = value;
     }
 
+    @Override
+    public String toString(){
+        return "Since : " + value;
+    }
+
 }

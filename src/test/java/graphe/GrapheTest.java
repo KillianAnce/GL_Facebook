@@ -51,7 +51,7 @@ public class GrapheTest {
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
 		g.addVertex(v1);
-		g.addMutualEdge(v, v1);
+		g.addMutualEdge(v, v1, "<>", null, "friend");
 		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), true);
 		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), true);
 	}

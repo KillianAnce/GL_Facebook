@@ -5,11 +5,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import graphe.Graphe;
+import graphe.Hired;
 import graphe.LinkProperties;
+import graphe.Role;
 import graphe.Shared;
 import graphe.Since;
 import graphe.Vertex;
@@ -26,7 +27,7 @@ public class Reader {
         BufferedReader br = new BufferedReader(new FileReader(this.f));
         String line;
         while ((line = br.readLine()) != null) {
-            if (Pattern.matches("^[A-Z][a-z]+\\:[A-Za-z_]+\\:((([A-Za-z]+(\\=([A-Za-z]+|[0-9]+|[A-Za-z]+ ?[0-9]+|([A-Za-z0-9]+\\,?)+))?)(\\;)?)+)?-->\\:[A-Z][a-z]+", line)) {
+            if (Pattern.matches("^[A-Z][a-z]+\\:[A-Za-z_]+\\:((([A-Za-z]+(\\=([A-Za-z]+|[0-9]+|[A-Za-z]+ ?[0-9]+|([A-Za-z0-9]+\\,?)+))?)(\\;)?)+)?-->\\:[A-Za-z]+", line)) {
                 // Step 1 : vertices creation
                 String[] vertices = line.split(":");
                 Vertex v = new Vertex(vertices[0]); 
@@ -40,32 +41,51 @@ public class Reader {
                 String name = vertices[1];
                 String[] Link = vertices[vertices.length-2].split("--");
                 String direction = Link[1];
-                Shared o = null;
-                Since a = null;
+                LinkProperties o = null;
                 String[] LinkProperties = Link[0].split(";");
                 ArrayList<LinkProperties> LP = new ArrayList<LinkProperties>();
                 for (String s : LinkProperties){
                     String[] el = s.split("=");
-                    if (el[0].equals("shared") || el[0].equals("Shared")){
-                        o = new Shared();
-                        String[] values = el[1].split(",");
-                        for (String value : values){
-                            o.setShared(value);
-                        }
-                    }
-                    if (el[0].equals("since") || el[0].equals("Since")){
-                        a = new Since(Integer.parseInt(el[1]));
+                    switch (el[0]){
+                        case "shared":
+                            o = new Shared();
+                            String[] values = el[1].split(",");
+                            for (String value : values){
+                                ((Shared) o).setShared(value);
+                            }
+                            break;
+                        case "since":
+                            o = new Since(Integer.parseInt(el[1]));
+                            break;
+                        case "role":
+                            o = new Role(el[1]);
+                            break;
+                        case "hired":
+                            o = new Hired(el[1]);
+                            break;
+                        default:
+                            // Nothing
                     }
                     LP.add(o);
-                    LP.add(a);
                 }
-                for (LinkProperties k : LP){
-                    System.out.println(k);
+
+                switch (direction) {
+                    case ">":
+                        g.addSingleEdge(v, v1, direction, LP, name);
+                        break;
+                    case "<":
+                        g.addSingleEdge(v1, v, direction, LP, name);
+                        break;
+                    case "<>":
+                        g.addMutualEdge(v, v1, direction, LP, name);
+                        break;
+                    default:
+                        // nothing
                 }
-                g.addSingleEdge(v, v1, direction, LP, name);
+                
                 System.out.println(g.toString());
             } else {
-                System.out.println("non oke");
+                // nothing
             }
         }
         br.close();

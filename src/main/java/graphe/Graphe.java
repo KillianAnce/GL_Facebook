@@ -1,12 +1,9 @@
 package graphe;
 
-import java.nio.file.LinkPermission;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
@@ -37,20 +34,16 @@ public class Graphe {
         // children.get(v1).add(v2);
         v1.setChildren(v2);
         v2.setParents(v1);
-        v2.setLink(new Link(">", l, "Friend"));
+        v2.setLink(new Link(v1, direction, l, name, v2));
     }
     
-    public void addMutualEdge(Vertex v1, Vertex v2) {
-    	// children.get(l1).add(l2);
-        // children.get(l2).add(l1);
+    public void addMutualEdge(Vertex v1, Vertex v2, String direction, ArrayList<LinkProperties> l, String name) {
         v1.setChildren(v2);
         v2.setChildren(v1);
         v1.setParents(v2);
         v2.setParents(v1);
-        Link l = new Link(">", null, "Friend");
-        l.setLinkProperties(null); 
-        v1.setLink(l);
-        v2.setLink(new Link(">", null, "Friend"));
+        v1.setLink(new Link(v1, direction, l, name, v2));
+        v2.setLink(new Link(v2, direction, l, name, v1));
     }
     
     public Set<String> depthFirstTraversal(Vertex root, int l) {
@@ -98,6 +91,6 @@ public class Graphe {
 
     @Override
     public String toString(){
-        return "Graphe : " + vertices;
+        return " " + vertices;
     }
 }
