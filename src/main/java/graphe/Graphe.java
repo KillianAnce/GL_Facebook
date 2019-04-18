@@ -49,17 +49,17 @@ public class Graphe {
         v2.setLink(new Link(v2, direction, l, name, v1));
     }
 
-    public Set<String> depthFirstTraversal(Vertex root, int l) {
+    public Set<String> depthFirstTraversal(String root, int l) {
         Set<String> visited = new LinkedHashSet<String>();
-        Stack<Vertex> stack = new Stack<Vertex>();
+        Stack<String> stack = new Stack<String>();
         stack.push(root);
         int i = 0;
         while (!stack.isEmpty() && i < l) {
-            Vertex vertex = stack.pop();
-            if (!visited.contains(vertex.getLabel())) {
-                visited.add(vertex.getLabel());
-                for (Vertex v : this.getAdjVerticesOfVertex(vertex)) {
-                    stack.push(v);
+            String vertex = stack.pop();
+            if (!visited.contains(this.getVertex(vertex).getLabel())) {
+                visited.add(this.getVertex(vertex).getLabel());
+                for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex))) {
+                    stack.push(v.getLabel());
                 }
             }
             i++;
@@ -67,19 +67,25 @@ public class Graphe {
         return visited;
     }
 
-    public Set<String> breadthFirstTraversal(Vertex root) {
+    public Set<String> breadthFirstTraversal(String root, int l, String relation) {
         Set<String> visited = new LinkedHashSet<String>();
-        Queue<Vertex> queue = new LinkedList<Vertex>();
+        Queue<String> queue = new LinkedList<String>();
         queue.add(root);
-        visited.add(root.getLabel());
-        while (!queue.isEmpty()) {
-            Vertex vertex = queue.poll();
-            for (Vertex v : this.getAdjVerticesOfVertex(vertex)) {
-                if (!visited.contains(v.getLabel())) {
-                    visited.add(v.getLabel());
-                    queue.add(v);
+        visited.add(root);
+        int i = 0;
+        while (!queue.isEmpty() && i<l) {
+            String vertex = queue.poll();
+            for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex))) {
+                for (Link link : v.getLink()) {
+                    if (link.getSource() == this.getVertex(vertex) && link.getRelation().equals(relation)) {
+                        if (!visited.contains(v.getLabel())) {
+                            visited.add(v.getLabel());
+                            queue.add(v.getLabel());
+                        }
+                    }
                 }
             }
+            i++;
         }
         return visited;
     }
@@ -88,18 +94,20 @@ public class Graphe {
         Set<String> visited = new LinkedHashSet<String>();
         Stack<String> stack = new Stack<String>();
         stack.push(root);
-        while (!stack.isEmpty()) {
+        int i = 0;
+        while (!stack.isEmpty() && i<l) {
             String vertex = stack.pop();
             if (!visited.contains(vertex)) {
                 visited.add(vertex);
                 for (Vertex v : this.getAdjVerticesOfVertex(getVertex(vertex))) {              
                     for (Link link : v.getLink()) {
-                        if (link.getSource() == this.getVertex(vertex) && link.getRelation() == relation) {
+                        if (link.getSource() == this.getVertex(vertex) && link.getRelation().equals(relation)) {
                             stack.push(v.getLabel());
                         }
                     }
                 }
             }
+            i++;
         }
         
         return visited;
