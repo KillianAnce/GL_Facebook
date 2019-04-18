@@ -27,7 +27,7 @@ public class Reader {
         BufferedReader br = new BufferedReader(new FileReader(this.f));
         String line;
         while ((line = br.readLine()) != null) {
-            if (Pattern.matches("^[A-Z][a-z]+\\:[A-Za-z_]+\\:((([A-Za-z]+(\\=([A-Za-z]+|[0-9]+|[A-Za-z]+ ?[0-9]+|([A-Za-z0-9]+\\,?)+))?)(\\;)?)+)?-->\\:[A-Za-z]+", line)) {
+            if (Pattern.matches("^[A-Za-z]+\\:[A-Za-z_]+\\:((([A-Za-z]+(\\=([A-Za-z]+|[0-9]+|[A-Za-z]+ ?[0-9]+|([A-Za-z0-9]+\\,?)+))?)(\\;)?)+)?--(>|<>)\\:[A-Za-z]+", line)) {
                 // Step 1 : vertices creation
                 String[] vertices = line.split(":");
                 Vertex v = new Vertex(vertices[0]); 

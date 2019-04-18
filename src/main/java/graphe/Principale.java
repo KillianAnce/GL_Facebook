@@ -10,6 +10,7 @@ public class Principale {
 		Reader r = new Reader("src/test/java/reader/facebook.txt");
 		Graphe g = r.read();
 		System.out.println(g.depthFirstTraversal("Barbara", 4, "friend"));
-		System.out.println(g.breadthFirstTraversal("Barbara", 2, "friend"));
+		System.out.println(g.breadthFirstTraversal("Barbara", 4, "friend"));
+		System.out.println(g.depthFirstTraversal("Barbara", 2, "friend"));
 	}
 }

@@ -1,18 +1,24 @@
 package graphe;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals; 
+
+import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
+
+import reader.Reader;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GrapheTest {
-	
+
 	@Test
 	public void grapheEmpty() {
 		Graphe g = new Graphe();
 		assertThat(g.getAdjVertices().size(), is(0));
 	}
-	
+
 	@Test
 	public void grapheNotEmpty() {
 		Graphe g = new Graphe();
@@ -20,8 +26,8 @@ public class GrapheTest {
 		g.addVertex(v);
 		assertThat(g.getAdjVertices().size(), is(1));
 	}
-	
-	@Test 
+
+	@Test
 	public void nodeWithoutRelation() {
 		Graphe g = new Graphe();
 		Vertex v = new Vertex("Thomas");
@@ -31,8 +37,8 @@ public class GrapheTest {
 		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), false);
 		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), false);
 	}
-	
-	@Test 
+
+	@Test
 	public void nodeWithSimpleRelation() {
 		Graphe g = new Graphe();
 		Vertex v = new Vertex("Thomas");
@@ -43,8 +49,8 @@ public class GrapheTest {
 		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), true);
 		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), false);
 	}
-	
-	@Test 
+
+	@Test
 	public void nodeWithMutualRelation() {
 		Graphe g = new Graphe();
 		Vertex v = new Vertex("Thomas");
@@ -56,7 +62,6 @@ public class GrapheTest {
 		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), true);
 	}
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void DescendantFriendship() {
 		Graphe g = new Graphe();
@@ -68,10 +73,9 @@ public class GrapheTest {
 		g.addVertex(v2);
 		g.addSingleEdge(v, v1, ">", null, "friend");
 		g.addSingleEdge(v1, v2, ">", null, "friend");
-		assertEquals(g.depthFirstTraversal("Barbara",2,"friend").contains(v2), true);
+		assertEquals(g.depthFirstTraversal("Barbara", 2, "friend").contains("Dawn"), true);
 	}
-	
-	@SuppressWarnings("unlikely-arg-type")
+
 	@Test
 	public void NoDescendantFriendship() {
 		Graphe g = new Graphe();
@@ -82,7 +86,17 @@ public class GrapheTest {
 		g.addVertex(v1);
 		g.addVertex(v2);
 		g.addSingleEdge(v, v1, ">", null, "friend");
-		assertEquals(g.depthFirstTraversal("Barbara",2).contains(v2), false);
-		assertEquals(g.breadthFirstTraversal("Barbara",2,"friend").contains(v2), false);
+		assertEquals(g.breadthFirstTraversal("Barbara", 3, "friend").contains("Dawn"), false);
+	}
+
+	@Test
+	public void readerCorrect() throws IOException {
+		Reader r = new Reader("src/test/java/reader/facebook.txt");
+		Graphe g = r.read();
+		assertEquals(g.breadthFirstTraversal("Barbara", 1, "friend").contains("Anna"), true);
+		for (Link l : g.getVertex("BigCO").getLink()){
+			assertEquals(l.getRelation(), "employeof");
+		}
+		assertEquals(g.getAdjVertices().size(), 13);
 	}
 }
