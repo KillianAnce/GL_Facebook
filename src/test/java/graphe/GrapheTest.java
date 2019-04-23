@@ -2,12 +2,7 @@ package graphe;
 
 import static org.junit.jupiter.api.Assertions.assertEquals; 
 
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
-
-import reader.Reader;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
