@@ -48,7 +48,9 @@ public class Graphe {
         v2.setLink(new Link(v2, direction, l, relation, v1));
     }
 
-    public Set<String> breadthFirstTraversal(String root, int l, String relation) {
+/*  En cours de réalisation  
+ 	
+ 	public Set<String> breadthFirstTraversal(String root, int l, String relation) {
         Set<String> visited = new LinkedHashSet<String>();
         Queue<String> queue = new LinkedList<String>();
         queue.add(root);
@@ -70,6 +72,7 @@ public class Graphe {
         }
         return visited;
     }
+
 
     public Set<String> depthFirstTraversal(String root, int l, String relation) {
         Set<String> visited = new LinkedHashSet<String>();
@@ -93,7 +96,7 @@ public class Graphe {
         
         return visited;
     }
-
+*/
     public Set<Vertex> getAdjVerticesOfVertex(Vertex v) {
         return v.getChildren();
     }

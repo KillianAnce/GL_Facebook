@@ -61,42 +61,4 @@ public class GrapheTest {
 		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), true);
 		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), true);
 	}
-
-	@Test
-	public void DescendantFriendship() {
-		Graphe g = new Graphe();
-		Vertex v = new Vertex("Barbara");
-		Vertex v1 = new Vertex("Carole");
-		Vertex v2 = new Vertex("Dawn");
-		g.addVertex(v);
-		g.addVertex(v1);
-		g.addVertex(v2);
-		g.addSingleEdge(v, v1, ">", null, "friend");
-		g.addSingleEdge(v1, v2, ">", null, "friend");
-		assertEquals(g.depthFirstTraversal("Barbara", 2, "friend").contains("Dawn"), true);
-	}
-
-	@Test
-	public void NoDescendantFriendship() {
-		Graphe g = new Graphe();
-		Vertex v = new Vertex("Barbara");
-		Vertex v1 = new Vertex("Anna");
-		Vertex v2 = new Vertex("Dawn");
-		g.addVertex(v);
-		g.addVertex(v1);
-		g.addVertex(v2);
-		g.addSingleEdge(v, v1, ">", null, "friend");
-		assertEquals(g.breadthFirstTraversal("Barbara", 3, "friend").contains("Dawn"), false);
-	}
-
-	@Test
-	public void readerCorrect() throws IOException {
-		Reader r = new Reader("src/test/java/reader/facebook.txt");
-		Graphe g = r.read();
-		assertEquals(g.breadthFirstTraversal("Barbara", 1, "friend").contains("Anna"), true);
-		for (Link l : g.getVertex("BigCO").getLink()){
-			assertEquals(l.getRelation(), "employeof");
-		}
-		assertEquals(g.getAdjVertices().size(), 13);
-	}
 }
