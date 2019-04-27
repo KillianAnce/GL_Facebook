@@ -11,6 +11,7 @@ Carol:friend:-->:Dawn
 Carol:likes:-->:NoSQLDistilled
 Dawn:likes:-->:NoSQLDistilled
 Dawn:friend:-->:Jill
+Jill:friend:-->:Jack
 Elisabeth:friend:-->:Jill
 Elisabeth:likes:-->:NoSQLDistilled
 Refactoring:author:-->:Martin

@@ -2,6 +2,7 @@ package graphe;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -48,7 +49,7 @@ public class Graphe {
 		v2.setLink(new Link(v2, direction, l, relation, v1));
 	}
 
-//  En cours de réalisation  
+	// En cours de rÃ©alisation
 
 	public Set<String> breadthFirstTraversal(String root, int l, String relation) {
 		Set<String> visited = new LinkedHashSet<String>();
@@ -58,14 +59,14 @@ public class Graphe {
 		int i = 1;
 		while (!queue.isEmpty() && i <= l) {
 			for (int j = 0; j <= queue.size(); j++) {
-//				System.out.println(i);
-//				System.out.println("j : " + j);
-//				System.out.println("Queue size après : " + queue.size());
-//				System.out.println("Avant : " + queue);
+				// System.out.println(i);
+				// System.out.println("j : " + j);
+				// System.out.println("Queue size aprÃ¨s : " + queue.size());
+				// System.out.println("Avant : " + queue);
 				String vertex = queue.poll();
-//				System.out.println("Après : " + queue);
+				// System.out.println("AprÃ¨s : " + queue);
 				for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex))) {
-//					System.out.println(v);
+					// System.out.println(v);
 					for (Link link : v.getLink()) {
 						if (link.getSource() == this.getVertex(vertex) && link.getRelation().equals(relation)) {
 							if (!visited.contains(v.getLabel())) {
@@ -81,27 +82,22 @@ public class Graphe {
 		return visited;
 	}
 
-	public Set<String> depthFirstTraversal(String root, int l, String relation) {
-		Set<String> visited = new LinkedHashSet<String>();
-		Stack<String> stack = new Stack<String>();
-		stack.push(root);
-		int i = 0;
-		while (!stack.isEmpty() && i <= l) {
-			String vertex = stack.pop();
-			if (!visited.contains(vertex)) {
-				visited.add(vertex);
-				for (Vertex v : this.getAdjVerticesOfVertex(getVertex(vertex))) {
-					for (Link link : v.getLink()) {
-						if (link.getSource() == this.getVertex(vertex) && link.getRelation().equals(relation)) {
-							stack.push(v.getLabel());
-						}
+	public Set<String> depthFirstTraversal(String origine, Set<String> sommetsVisites, String relation, int level) {
+		sommetsVisites.add(this.getVertex(origine).getLabel());
+		Iterator<Vertex> i = this.getVertex(origine).getChildren().iterator();
+		while (i.hasNext() && level>0) {
+			Vertex v = i.next();
+			String suivant = v.getLabel();
+			if (!sommetsVisites.contains(suivant)) {
+				for (Link link : v.getLink()) {
+					if (link.getRelation().equals(relation)) {
+						int l  = level - 1;
+						depthFirstTraversal(suivant, sommetsVisites, relation, l);
 					}
 				}
 			}
-			i++;
 		}
-
-		return visited;
+		return sommetsVisites;
 	}
 
 	public Set<Vertex> getAdjVerticesOfVertex(Vertex v) {
