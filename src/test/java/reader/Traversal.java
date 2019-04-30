@@ -1,6 +1,5 @@
 package reader;
 
-import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashSet;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import graphe.Graphe;
 
-class Traversal {
+public class Traversal {
 
 	private static Graphe graph;
 
@@ -19,7 +18,6 @@ class Traversal {
 	public static void setUp() throws Exception {
 		Reader reader = new Reader("src/main/resources/facebook.txt");
 		graph = reader.read();
-		
 	}
 
 	/**

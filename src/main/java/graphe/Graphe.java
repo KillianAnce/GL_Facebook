@@ -7,7 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Graphe {
 
@@ -81,7 +82,6 @@ public class Graphe {
 		}
 		return visited;
 	}
-
 	public Set<String> depthFirstTraversal(String origine, Set<String> sommetsVisites, String relation, int level) {
 		sommetsVisites.add(this.getVertex(origine).getLabel());
 		Iterator<Vertex> i = this.getVertex(origine).getChildren().iterator();
@@ -97,6 +97,39 @@ public class Graphe {
 				}
 			}
 		}
+		return sommetsVisites;
+	}
+
+	public Set<String> search(String search, Set<String> result){
+		Matcher mode = Pattern.compile("(mode=[A-Za-z]+)").matcher(search);
+		String traversal = null;
+		Matcher level = Pattern.compile("(niveau=[0-9]+)").matcher(search);
+		int levelTraversal = 0;
+		Matcher link = Pattern.compile("(liens=\\([a-z]+( (<|<>|>))?((\\,?[a-z]+( (<|<>|>))?)+)?\\))").matcher(search);
+		String[] linkParameters = null;
+		Set<String> sommetsVisites = new HashSet<String>();
+
+		if (mode.find()){
+			traversal = mode.group(0).split("=")[1];
+		}
+		if (level.find()){
+			levelTraversal = Integer.parseInt(level.group(0).split("=")[1]);
+		}
+		if (link.find()){
+			linkParameters = link.group(0).split("=")[1].split("\\(")[1].split("\\)")[0].split("\\,");
+		}
+
+		if (traversal.equals("profondeur")){
+			for (String s : linkParameters){
+				System.out.println(s);
+				this.depthFirstTraversal("Barbara", sommetsVisites, s, 1);
+				System.out.println(sommetsVisites);
+			}
+		} else {
+			for (String s : linkParameters){
+				System.out.println(this.breadthFirstTraversal("Barbara", 1, s));
+			}
+		}	
 		return sommetsVisites;
 	}
 
