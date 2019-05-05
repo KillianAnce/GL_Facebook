@@ -1,6 +1,6 @@
 package graphe;
 
-import static org.junit.jupiter.api.Assertions.assertEquals; 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
@@ -29,8 +29,8 @@ public class GrapheTest {
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
 		g.addVertex(v1);
-		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), false);
-		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), false);
+		assertEquals(g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1), false);
+		assertEquals(g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v), false);
 	}
 
 	@Test
@@ -41,8 +41,8 @@ public class GrapheTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addSingleEdge(v, v1, ">", null, "friend");
-		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), true);
-		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), false);
+		assertEquals(g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1), true);
+		assertEquals(g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v), false);
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class GrapheTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addMutualEdge(v, v1, "<>", null, "friend");
-		assertEquals(g.getAdjVerticesOfVertex(v).contains(v1), true);
-		assertEquals(g.getAdjVerticesOfVertex(v1).contains(v), true);
+		assertEquals(g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1), true);
+		assertEquals(g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v), true);
 	}
 }
