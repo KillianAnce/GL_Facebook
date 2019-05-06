@@ -82,31 +82,51 @@ public class Graphe {
 	}
 
 	// à faire
-	public Set<String> depthFirstTraversal(String root, Set<String> sommetsVisites, String[] relation, int level) {
+	public Set<String> depthFirstTraversal(String root, Set<String> sommetsVisites, String[] relation, int level, int idx) {
+		String[] linkParameters = { null, null };
+		String direction = ">";
+		System.out.println("index : " + idx);
+		if (Pattern.compile("([A-Za-z]+ (<|<>|>))").matcher(relation[idx]).find()) {
+			linkParameters = relation[idx].split(" ");
+			direction = linkParameters[1];
+		}
+		if (Pattern.compile("^([A-Za-z]+)$").matcher(relation[idx]).find()) {
+			linkParameters[0] = relation[idx];
+			direction = ">";
+		}
 		sommetsVisites.add(this.getVertex(root).getLabel());
-		Iterator<Vertex> i = this.getVertex(root).getChildren().iterator();
+		System.out.println(this.getAdjVerticesOfVertex(this.getVertex(root), direction, linkParameters[0]));
+		Iterator<Vertex> i = this.getAdjVerticesOfVertex(this.getVertex(root), direction, linkParameters[0]).iterator();
 		while (i.hasNext() && level > 0) {
 			Vertex v = i.next();
 			String suivant = v.getLabel();
 			if (!sommetsVisites.contains(suivant)) {
-				for (Link link : v.getLink()) {
-					int index = level - 1;
-
-					String[] linkParameters = { null, null };
-					String direction = ">";
-					if (Pattern.compile("([A-Za-z]+ (<|<>|>))").matcher(relation[index]).find()) {
-						linkParameters = relation[index].split(" ");
-						direction = linkParameters[1];
+				int lx = idx;
+				if (direction.equals("<")){
+					for (Link link : this.getVertex(root).getLink()) {
+						if (link.getRelation().equals(linkParameters[0])) {
+							int l = level - 1;
+							System.out.println("index avant : " + lx);
+							if (lx < relation.length - 1) {
+								lx++;
+							}
+							System.out.println(
+								"Source " + link.getSource().getLabel() + " vers " + suivant + " index après " + lx);
+							depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
+						}
 					}
-					if (Pattern.compile("^([A-Za-z]+)$").matcher(relation[index]).find()) {
-						linkParameters[0] = relation[index];
-						direction = ">";
-					}
-					System.out.println(
-							"Source " + link.getSource().getLabel() + " vers " + v.getLabel() + " index " + index);
-					if (link.getRelation().equals(linkParameters[0])) {
-						int l = level - 1;
-						depthFirstTraversal(suivant, sommetsVisites, relation, l);
+				} else {
+					for (Link link : v.getLink()) {
+						if (link.getRelation().equals(linkParameters[0])) {
+							int l = level - 1;
+							System.out.println("index avant : " + lx);
+							if (lx < relation.length - 1) {
+								lx++;
+							}
+							System.out.println(
+								"Source " + link.getSource().getLabel() + " vers " + suivant + " index après " + lx);
+							depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
+						}
 					}
 				}
 			}
@@ -141,7 +161,7 @@ public class Graphe {
 		}
 
 		if (traversal.equals("profondeur")) {
-			this.depthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal);
+			this.depthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal, 0);
 		} else {
 			this.breadthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal);
 		}

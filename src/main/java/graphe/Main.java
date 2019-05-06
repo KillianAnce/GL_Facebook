@@ -15,7 +15,7 @@ public class Main {
 		//Set<String> visited = new HashSet<String>();
 		
 		Set<String> s = new HashSet<String>();
-		System.out.println(g.search("NoSQLDistilled","mode=profondeur,liens=(friend <),niveau=2", s));
+		System.out.println(g.search("Databases","mode=profondeur,liens=(category <,author,author <,likes <),niveau=4", s));
 		System.out.println(g.search("NoSQLDistilled","mode=p,liens=(likes <,friend),niveau=2", s));
 		//System.out.println(g.breadthFirstTraversal("Barbara", 2, "friend"));
 	}
