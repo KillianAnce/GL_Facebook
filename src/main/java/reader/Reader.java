@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import graphe.Graphe;
+import graphe.Graph;
 import graphe.Hired;
 import graphe.LinkProperties;
 import graphe.Role;
@@ -22,8 +22,8 @@ public class Reader {
         this.f = new File(f);
     }
 
-    public Graphe read() throws IOException {
-        Graphe g = new Graphe();
+    public Graph read() throws IOException {
+        Graph g = new Graph();
         BufferedReader br = new BufferedReader(new FileReader(this.f));
         String line;
         while ((line = br.readLine()) != null) {

@@ -10,13 +10,13 @@ public class GrapheTest {
 
 	@Test
 	public void grapheEmpty() {
-		Graphe g = new Graphe();
+		Graph g = new Graph();
 		assertThat(g.getAdjVertices().size(), is(0));
 	}
 
 	@Test
 	public void grapheNotEmpty() {
-		Graphe g = new Graphe();
+		Graph g = new Graph();
 		Vertex v = new Vertex("Thomas");
 		g.addVertex(v);
 		assertThat(g.getAdjVertices().size(), is(1));
@@ -24,7 +24,7 @@ public class GrapheTest {
 
 	@Test
 	public void nodeWithoutRelation() {
-		Graphe g = new Graphe();
+		Graph g = new Graph();
 		Vertex v = new Vertex("Thomas");
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
@@ -35,7 +35,7 @@ public class GrapheTest {
 
 	@Test
 	public void nodeWithSimpleRelation() {
-		Graphe g = new Graphe();
+		Graph g = new Graph();
 		Vertex v = new Vertex("Thomas");
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
@@ -47,7 +47,7 @@ public class GrapheTest {
 
 	@Test
 	public void nodeWithMutualRelation() {
-		Graphe g = new Graphe();
+		Graph g = new Graph();
 		Vertex v = new Vertex("Thomas");
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);

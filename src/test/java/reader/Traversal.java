@@ -8,11 +8,11 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import graphe.Graphe;
+import graphe.Graph;
 
 public class Traversal {
 
-	private static Graphe graph;
+	private static Graph graph;
 	String[] params = {"friend >"};
 
 	@BeforeAll

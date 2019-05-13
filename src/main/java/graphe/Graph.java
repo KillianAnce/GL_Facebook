@@ -9,11 +9,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Graphe {
+public class Graph {
 
 	private Set<Vertex> vertices;
 
-	public Graphe() {
+	public Graph() {
 		this.vertices = new HashSet<Vertex>();
 	}
 
@@ -85,7 +85,6 @@ public class Graphe {
 	public Set<String> depthFirstTraversal(String root, Set<String> sommetsVisites, String[] relation, int level, int idx) {
 		String[] linkParameters = { null, null };
 		String direction = ">";
-		System.out.println("index : " + idx);
 		if (Pattern.compile("([A-Za-z]+ (<|<>|>))").matcher(relation[idx]).find()) {
 			linkParameters = relation[idx].split(" ");
 			direction = linkParameters[1];
@@ -95,7 +94,6 @@ public class Graphe {
 			direction = ">";
 		}
 		sommetsVisites.add(this.getVertex(root).getLabel());
-		System.out.println(this.getAdjVerticesOfVertex(this.getVertex(root), direction, linkParameters[0]));
 		Iterator<Vertex> i = this.getAdjVerticesOfVertex(this.getVertex(root), direction, linkParameters[0]).iterator();
 		while (i.hasNext() && level > 0) {
 			Vertex v = i.next();
@@ -106,12 +104,9 @@ public class Graphe {
 					for (Link link : this.getVertex(root).getLink()) {
 						if (link.getRelation().equals(linkParameters[0])) {
 							int l = level - 1;
-							System.out.println("index avant : " + lx);
 							if (lx < relation.length - 1) {
 								lx++;
 							}
-							System.out.println(
-								"Source " + link.getSource().getLabel() + " vers " + suivant + " index après " + lx);
 							depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
 						}
 					}
@@ -119,12 +114,9 @@ public class Graphe {
 					for (Link link : v.getLink()) {
 						if (link.getRelation().equals(linkParameters[0])) {
 							int l = level - 1;
-							System.out.println("index avant : " + lx);
 							if (lx < relation.length - 1) {
 								lx++;
 							}
-							System.out.println(
-								"Source " + link.getSource().getLabel() + " vers " + suivant + " index après " + lx);
 							depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
 						}
 					}
@@ -141,7 +133,7 @@ public class Graphe {
 		}
 	}
 
-	public Set<String> search(String start, String search, Set<String> result) {
+	public Set<String> search(String start, String search) {
 		Matcher mode = Pattern.compile("(mode=[A-Za-z]+)").matcher(search);
 		String traversal = null;
 		Matcher level = Pattern.compile("(niveau=[0-9]+)").matcher(search);
