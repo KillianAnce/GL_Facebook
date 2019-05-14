@@ -59,27 +59,27 @@ public class Graph {
 		return linkParameters;
 	}
 	
-	public Set<String> breadthFirstTraversal(String root, Set<String> visited, String[] relation, int l) {
+	public Set<String> breadthFirstTraversal(String root, Set<String> visited, String[] relation, int level) {
 		Queue<String> queue = new LinkedList<String>();
 		queue.add(root);
 		visited.add(root);
-		int i = 1;
-		int k = 0;
-		while (!queue.isEmpty() && i <= l) {
+		int iterator = 1;
+		int index = 0;
+		while (!queue.isEmpty() && iterator <= level) {
 			int size = queue.size();
 			for (int j = 1; j <= size; j++) {
 				String vertex = queue.poll();
 				String[] linkParameters = { null, "<>" };
-				linkParameters = matcher(linkParameters, relation, k);
+				linkParameters = matcher(linkParameters, relation, index);
 				for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex), linkParameters[1], linkParameters[0])) {
 					visited.add(v.getLabel());
 					queue.add(v.getLabel());
 				}
 			}
-			if (k < relation.length - 1) {
-				k++;
+			if (index < relation.length - 1) {
+				index++;
 			}
-			i++;
+			iterator++;
 		}
 		return visited;
 	}

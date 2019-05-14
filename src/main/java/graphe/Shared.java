@@ -10,6 +10,11 @@ public class Shared extends LinkProperties {
         super("Shared");
         this.shared = new HashSet<String>();
     }
+    
+    public Shared(HashSet<String> shared){
+        super("Shared");
+        this.shared = shared;
+    }
 
     public Set<String> getShared() {
         return shared;

@@ -2,6 +2,7 @@ package graphe;
 
 import java.util.ArrayList;
 
+
 public class Link {
 
 	private Vertex source;
@@ -31,7 +32,24 @@ public class Link {
 	}
 
 	public void setLinkProperties(LinkProperties linkProperties) {
-		this.linkProperties.add(linkProperties);
+		boolean isPresent = false;
+		if (this.linkProperties.get(0)==null) {
+			this.linkProperties.clear();
+		} else {
+			for (LinkProperties property : this.linkProperties) {
+				try {
+					if (linkProperties.value.equals(property.value)) {
+						isPresent = true;
+					}
+				} catch (NullPointerException e) {
+					//
+				}
+			}
+		}
+		
+		if (!isPresent) {
+			this.linkProperties.add(linkProperties);
+		}
 	}
 
 	public String getRelation() {

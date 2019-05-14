@@ -1,13 +1,13 @@
 Anna:employeof:-->:BigCO
 Anna:likes:-->:Refactoring
-Barbara:employeof:-->:BigCO
-Barbara:friend:-->:Anna
+Barbara:employeof:role=secretaire;hired=2000-->:BigCO
+Barbara:friend:since=2000-->:Anna
 Barbara:friend:-->:Carol
 Barbara:friend:-->:Elisabeth
 Barbara:likes:-->:Refactoring
 Barbara:likes:-->:NoSQLDistilled
 Carol:employeof:-->:BigCO
-Carol:friend:-->:Dawn
+Carol:friend:shared=books,music-->:Dawn
 Carol:likes:-->:NoSQLDistilled
 Dawn:likes:-->:NoSQLDistilled
 Dawn:friend:-->:Jill

@@ -64,7 +64,7 @@ public class Reader {
                             o = new Hired(el[1]);
                             break;
                         default:
-                            // Nothing
+                            
                     }
                     LP.add(o);
                 }
@@ -72,9 +72,6 @@ public class Reader {
                 switch (direction) {
                     case ">":
                         g.addSingleEdge(v, v1, direction, LP, name);
-                        break;
-                    case "<":
-                        g.addSingleEdge(v1, v, direction, LP, name);
                         break;
                     case "<>":
                         g.addMutualEdge(v, v1, direction, LP, name);
