@@ -26,6 +26,6 @@ public class Shared extends LinkProperties {
 
     @Override
     public String toString(){
-        return "Shared : " + shared;
+        return "shared=" + shared.toString().replace(",", "+").trim();
     }
 }

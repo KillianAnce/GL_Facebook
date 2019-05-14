@@ -1,5 +1,14 @@
 package graphe;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -163,6 +172,18 @@ public class Graph {
 			return vertices;
 		}
 	}
+	
+	public void export(String filename) {
+		try {
+			@SuppressWarnings("resource")
+			PrintWriter export =  new PrintWriter(new BufferedWriter
+				   (new FileWriter(filename + ".txt")));
+			export.println(this.toString());
+			export.close();
+		} catch (Exception e) {
+			
+		}
+	}
 
 	public Set<Vertex> getAdjVertices() {
 		return this.vertices;
@@ -170,6 +191,6 @@ public class Graph {
 
 	@Override
 	public String toString() {
-		return " " + vertices;
+		return "" + vertices.toString().replace("[", "").replace("]", "").replace(", ", "").trim();
 	}
 }

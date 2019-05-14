@@ -25,7 +25,7 @@ public class Since extends LinkProperties {
 
     @Override
     public String toString(){
-        return "Since : " + value;
+        return "since=" + value;
     }
 
 }

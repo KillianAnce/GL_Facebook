@@ -9,6 +9,6 @@ public class LinkProperties {
 
     @Override
     public String toString(){
-        return "LinkProperties : " + value;
+        return value;
     }
 }

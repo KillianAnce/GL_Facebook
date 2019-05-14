@@ -47,11 +47,20 @@ public class Vertex {
 	}
 
 	public void setLink(Link link) {
-		this.link.add(link);
+		boolean isPresent = false;
+		for (Link arrayLink: this.link) {
+			if (link.getSource() == arrayLink.getSource() 
+					&& link.getDestination() == arrayLink.getDestination()) {
+				isPresent = true;
+			}
+		}
+		if (!isPresent) {
+			this.link.add(link);
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "Vertex [" + label + " " + link + "]";
+		return "" + link;
 	}
 }

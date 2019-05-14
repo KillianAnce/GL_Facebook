@@ -90,7 +90,18 @@ public class Link {
 	
 	@Override
 	public String toString(){
-		return "Link [properties " + linkProperties + "]";
+		if (linkProperties.get(0) == null) {
+			return source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel() + "\n";
+		}
+		return source.getLabel() + ":" + relation + ":" +
+		linkProperties.toString()
+			.replace("[", "")
+			.replace(" ", "")
+			.replace("]", "")
+			.replace(",", ";")
+			.replace("+", ",")
+			.trim() + 
+			":" + "--" + direction + ":" + destination.getLabel() + "\n";
 	}
 
 }

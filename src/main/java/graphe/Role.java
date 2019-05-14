@@ -25,7 +25,7 @@ public class Role extends LinkProperties {
 
     @Override
     public String toString(){
-        return "Role : " + role;
+        return "role=" + role;
     }
 
 }

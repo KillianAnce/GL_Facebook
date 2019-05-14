@@ -25,7 +25,7 @@ public class Hired extends LinkProperties {
 
     @Override
     public String toString(){
-        return "Hired : " + date;
+        return "hired=" + date.toString();
     }
 
 }

@@ -75,19 +75,19 @@ public class GraphTest {
 	
 	@Test
 	public void checkPropertiesSince() {
-		assertEquals("[Since : 2000]",
+		assertEquals("[since=2000]",
 				graph.getVertex("Anna").getLink().get(0).getLinkProperties().toString());
 	}
 	
 	@Test
 	public void checkPropertiesRole() {
-		assertEquals("Role : secretaire", 
+		assertEquals("role=secretaire", 
 				graph.getVertex("BigCO").getLink().get(1).getLinkProperties().get(0).toString());
 	}
 	
 	@Test
 	public void checkPropertiesHired() {
-		assertEquals("Hired : 2000", 
+		assertEquals("hired=2000", 
 				graph.getVertex("BigCO").getLink().get(1).getLinkProperties().get(1).toString());
 	}
 	
@@ -96,20 +96,20 @@ public class GraphTest {
 		graph.getVertex("BigCO").getLink().get(1).setLinkProperties(new Hired("2000"));
 		int count = (int) graph.getVertex("BigCO").getLink().get(1).getLinkProperties()
 				.stream()
-				.filter(e -> "Hired : 2000".equals(e.toString())).count();
+				.filter(e -> "hired=2000".equals(e.toString())).count();
 		assertThat(count, is(1));
 	}
 	
 	@Test
 	public void checkPropertiesShared() {
-		assertEquals("[Shared : [books, music]]",
+		assertEquals("[shared=[books+ music]]",
 				graph.getVertex("Dawn").getLink().get(0).getLinkProperties().toString());
 	}
 	
 	@Test
 	public void addPropertyToNode() {
 		graph.getVertex("BigCO").getLink().get(0).setLinkProperties(new Hired("2000"));
-		assertEquals("[Hired : 2000]",graph.getVertex("BigCO").getLink().get(0).getLinkProperties().toString());
+		assertEquals("[hired=2000]",graph.getVertex("BigCO").getLink().get(0).getLinkProperties().toString());
 	}
 	
 	@Test
@@ -121,6 +121,6 @@ public class GraphTest {
 		set.add("Sport");
 		set.add("Bouffe");
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Shared(set));
-		assertEquals("Shared : [Sport, Bouffe]", (graph.getVertex("Jack").getLink().get(0).getLinkProperties().get(3).toString()));
+		assertEquals("shared=[Sport+ Bouffe]", (graph.getVertex("Jack").getLink().get(0).getLinkProperties().get(3).toString()));
 	}
 }
