@@ -49,6 +49,16 @@ public class Graph {
 		v2.setLink(new Link(v1, direction, l, relation, v2));
 	}
 
+	public String[] matcher(String[] linkParameters, String[] relation, int index) {
+		if (Pattern.compile("([A-Za-z]+ (<|>))").matcher(relation[index]).find()) {
+			linkParameters = relation[index].split(" ");
+		}
+		if (Pattern.compile("^([A-Za-z]+)$").matcher(relation[index]).find()) {
+			linkParameters[0] = relation[index];
+		}
+		return linkParameters;
+	}
+	
 	public Set<String> breadthFirstTraversal(String root, Set<String> visited, String[] relation, int l) {
 		Queue<String> queue = new LinkedList<String>();
 		queue.add(root);
@@ -59,18 +69,11 @@ public class Graph {
 			int size = queue.size();
 			for (int j = 1; j <= size; j++) {
 				String vertex = queue.poll();
-				String[] linkParameters = { null, null };
-				String direction = ">";
-				if (Pattern.compile("([A-Za-z]+ (<|<>|>))").matcher(relation[k]).find()) {
-					linkParameters = relation[k].split(" ");
-					direction = linkParameters[1];
-				}
-				if (Pattern.compile("^([A-Za-z]+)$").matcher(relation[k]).find()) {
-					linkParameters[0] = relation[k];
-					direction = ">";
-				}
-				for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex), direction, linkParameters[0])) {
-					setQueue(v, visited, queue);
+				String[] linkParameters = { null, "<>" };
+				linkParameters = matcher(linkParameters, relation, k);
+				for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex), linkParameters[1], linkParameters[0])) {
+					visited.add(v.getLabel());
+					queue.add(v.getLabel());
 				}
 			}
 			if (k < relation.length - 1) {
@@ -81,63 +84,29 @@ public class Graph {
 		return visited;
 	}
 
-	// à faire
 	public Set<String> depthFirstTraversal(String root, Set<String> sommetsVisites, String[] relation, int level, int idx) {
-		String[] linkParameters = { null, null };
-		String direction = ">";
-		if (Pattern.compile("([A-Za-z]+ (<|<>|>))").matcher(relation[idx]).find()) {
-			linkParameters = relation[idx].split(" ");
-			direction = linkParameters[1];
-		}
-		if (Pattern.compile("^([A-Za-z]+)$").matcher(relation[idx]).find()) {
-			linkParameters[0] = relation[idx];
-			direction = ">";
-		}
+		String[] linkParameters = { null, "<>" };
+		linkParameters = matcher(linkParameters, relation, idx);
 		sommetsVisites.add(this.getVertex(root).getLabel());
-		Iterator<Vertex> i = this.getAdjVerticesOfVertex(this.getVertex(root), direction, linkParameters[0]).iterator();
+		Iterator<Vertex> i = this.getAdjVerticesOfVertex(this.getVertex(root), linkParameters[1], linkParameters[0]).iterator();
 		while (i.hasNext() && level > 0) {
 			Vertex v = i.next();
 			String suivant = v.getLabel();
-			if (!sommetsVisites.contains(suivant)) {
-				int lx = idx;
-				if (direction.equals("<")){
-					for (Link link : this.getVertex(root).getLink()) {
-						if (link.getRelation().equals(linkParameters[0])) {
-							int l = level - 1;
-							if (lx < relation.length - 1) {
-								lx++;
-							}
-							depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
-						}
-					}
-				} else {
-					for (Link link : v.getLink()) {
-						if (link.getRelation().equals(linkParameters[0])) {
-							int l = level - 1;
-							if (lx < relation.length - 1) {
-								lx++;
-							}
-							depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
-						}
-					}
-				}
+			int lx = idx;
+			int l = level - 1;
+			if (lx < relation.length - 1) {
+				lx++;
 			}
+			depthFirstTraversal(suivant, sommetsVisites, relation, l, lx);
 		}
 		return sommetsVisites;
-	}
-
-	public void setQueue(Vertex v, Set<String> visited, Queue<String> queue) {
-		if (!visited.contains(v.getLabel())) {
-			visited.add(v.getLabel());
-			queue.add(v.getLabel());
-		}
 	}
 
 	public Set<String> search(String start, String search) {
 		Matcher mode = Pattern.compile("(mode=[A-Za-z]+)").matcher(search);
 		String traversal = null;
 		Matcher level = Pattern.compile("(niveau=[0-9]+)").matcher(search);
-		int levelTraversal = 0;
+		int levelTraversal = this.getAdjVertices().size();
 		Matcher link = Pattern.compile("(liens=\\([a-z]+( (<|<>|>))?((\\,?[a-z]+( (<|<>|>))?)+)?\\))").matcher(search);
 		String[] linkParameters = null;
 		Set<String> sommetsVisites = new HashSet<String>();
@@ -181,9 +150,14 @@ public class Graph {
 		} else {
 			for (Vertex vertexC : v.getChildren()) {
 				for (Link l : vertexC.getLink()) {
-					if (l.getSource() == v && l.getDirection().equals("<>")) {
+					if (l.getRelation().equals(linkParameter)) {
 						vertices.add(vertexC);
 					}
+				}
+			}
+			for (Link l : v.getLink()) {
+				if (l.getRelation().equals(linkParameter)) {
+					vertices.add(l.getSource());
 				}
 			}
 			return vertices;

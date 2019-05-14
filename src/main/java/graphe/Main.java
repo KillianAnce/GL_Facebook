@@ -16,6 +16,8 @@ public class Main {
 		
 		
 		System.out.println(g.search("Databases","mode=profondeur,liens=(category <,author,author <,likes <),niveau=4"));
+		System.out.println(g.search("BigCO","mode=profondeur,liens=(employeof <,likes >,likes <),niveau=3"));
+
 //		System.out.println(g.search("NoSQLDistilled","mode=p,liens=(likes <,friend),niveau=2"));
 		//System.out.println(g.breadthFirstTraversal("Barbara", 2, "friend"));
 	}
