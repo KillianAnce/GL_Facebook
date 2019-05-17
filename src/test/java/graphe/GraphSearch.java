@@ -10,21 +10,17 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import reader.Reader;
+import miage.graph.model.Graph;
+import miage.graph.utils.Reader;
 
 class GraphSearch {
 
 	private static Graph graph;
-	private static Graph graphSimple;
-	private Set<String> set;
 	
 	@BeforeAll
 	public static void setUp() throws Exception {
 		Reader reader = new Reader("src/main/resources/facebook.txt");
 		graph = reader.read();
-		
-		Reader simple = new Reader("src/main/resources/SimpleTest.txt");
-		graphSimple = simple.read();
 	}
 		
 	@Test

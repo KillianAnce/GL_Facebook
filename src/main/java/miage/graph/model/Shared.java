@@ -1,4 +1,4 @@
-package graphe;
+package miage.graph.model;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,10 +8,10 @@ public class Shared extends LinkProperties {
     
     public Shared(){
         super("Shared");
-        this.shared = new HashSet<String>();
+        this.shared = new HashSet<>();
     }
     
-    public Shared(HashSet<String> shared){
+    public Shared(Set<String> shared){
         super("Shared");
         this.shared = shared;
     }

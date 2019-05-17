@@ -1,14 +1,18 @@
 package graphe;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import reader.Reader;
+import miage.graph.model.Graph;
+import miage.graph.model.Hired;
+import miage.graph.model.Role;
+import miage.graph.model.Shared;
+import miage.graph.model.Since;
+import miage.graph.model.Vertex;
+import miage.graph.utils.Reader;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,8 +49,9 @@ public class GraphTest {
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
 		g.addVertex(v1);
-		assertEquals(g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1), false);
-		assertEquals(g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v), false);
+		assertEquals(false, g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1));
+		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v));
+		
 	}
 
 	@Test
@@ -57,8 +62,8 @@ public class GraphTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addSingleEdge(v, v1, ">", null, "friend");
-		assertEquals(g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1), true);
-		assertEquals(g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v), false);
+		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1));
+		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v));
 	}
 
 	@Test
@@ -69,8 +74,8 @@ public class GraphTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addMutualEdge(v, v1, "<>", null, "friend");
-		assertEquals(g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1), true);
-		assertEquals(g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v), true);
+		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1));
+		assertEquals(true, g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v));
 	}
 	
 	@Test
@@ -117,7 +122,7 @@ public class GraphTest {
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Hired("2000"));
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Role("Bricoleur"));
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Since(2000));
-		HashSet<String> set = new HashSet<String>();
+		Set<String> set = new HashSet<String>();
 		set.add("Sport");
 		set.add("Bouffe");
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Shared(set));

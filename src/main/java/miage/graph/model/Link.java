@@ -1,17 +1,17 @@
-package graphe;
+package miage.graph.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class Link {
 
 	private Vertex source;
 	private String direction;
-	private ArrayList<LinkProperties> linkProperties;
+	private List<LinkProperties> linkProperties;
 	private String relation;
 	private Vertex destination;
 	
-	public Link(Vertex source, String direction, ArrayList<LinkProperties> properties, String relation, Vertex destination) {
+	public Link(Vertex source, String direction, List<LinkProperties> properties, String relation, Vertex destination) {
 		this.source = source;
 		this.direction = direction;
 		this.linkProperties = properties;
@@ -27,10 +27,20 @@ public class Link {
 		this.direction = direction;
 	}
 
-	public ArrayList<LinkProperties> getLinkProperties() {
+	public List<LinkProperties> getLinkProperties() {
 		return linkProperties;
 	}
 
+	/**
+	 * Méthode permettant d'ajouter des propriétés à un lien
+	 * 
+	 * Remarque : 
+	 * - Si le lien n'avait pas de propriété lors de sa création,
+	 * la liste contient une valeur null en 1ere entrée
+	 * 
+	 * L'ajout vérifie aussi que la liste ne contient pas cette valeur
+	 * @param linkProperties
+	 */
 	public void setLinkProperties(LinkProperties linkProperties) {
 		boolean isPresent = false;
 		if (this.linkProperties.get(0)==null) {

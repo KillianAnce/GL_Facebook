@@ -1,4 +1,4 @@
-package graphe;
+package miage.graph.model;
 
 public class Hired extends LinkProperties {
 
@@ -25,7 +25,7 @@ public class Hired extends LinkProperties {
 
     @Override
     public String toString(){
-        return "hired=" + date.toString();
+        return "hired=" + date;
     }
 
 }

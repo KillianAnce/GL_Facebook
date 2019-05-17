@@ -1,7 +1,8 @@
-package graphe;
+package miage.graph.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Vertex {
@@ -9,13 +10,13 @@ public class Vertex {
 	private String label;
 	private Set<Vertex> parents;
 	private Set<Vertex> children;
-	private ArrayList<Link> link;
+	private List<Link> link;
 	
 	public Vertex(String label) {
         this.label = label;
-        this.link = new ArrayList<Link>();
-        this.parents = new HashSet<Vertex>();
-        this.children = new HashSet<Vertex>();
+        this.link = new ArrayList<>();
+        this.parents = new HashSet<>();
+        this.children = new HashSet<>();
     }
 
 	public String getLabel() {
@@ -30,19 +31,16 @@ public class Vertex {
 		return parents;
 	}
 
-	public void setParents(Vertex v) {
-		this.parents.add(v);
-	}
-
 	public Set<Vertex> getChildren() {
 		return children;
 	}
 
-	public void setChildren(Vertex v) {
+	public void setParentChildren(Vertex v) {
 		this.children.add(v);
+		v.getParents().add(this);
 	}
 
-	public ArrayList<Link> getLink() {
+	public List<Link> getLink() {
 		return link;
 	}
 

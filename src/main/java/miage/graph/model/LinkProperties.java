@@ -1,4 +1,4 @@
-package graphe;
+package miage.graph.model;
 
 public class LinkProperties {
     String value;
