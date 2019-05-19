@@ -17,10 +17,9 @@ import miage.graph.model.Since;
 import miage.graph.model.Vertex;
 
 public class Reader {
-	File f;
+	
 
-	public Reader(String f) {
-		this.f = new File(f);
+	private Reader() {
 	}
 
 	/**
@@ -32,7 +31,7 @@ public class Reader {
 	 * @param vertices Les 2 noms sommets que l'on va créer
 	 * @return
 	 */
-	private ArrayList<Vertex> vertexCreation(Graph graph, String[] vertices) {
+	private static ArrayList<Vertex> vertexCreation(Graph graph, String[] vertices) {
 		ArrayList<Vertex> listVertex = new ArrayList<>();
 		Vertex vertex1 = new Vertex(vertices[0]);
 		Vertex vertex2 = new Vertex(vertices[vertices.length - 1]);
@@ -53,7 +52,7 @@ public class Reader {
 	 * @param vertex Liste contenant les 2 sommets
 	 * @param vertices Les 2 noms sommets que l'on va créer
 	 */
-	private void linkCreation(Graph graph, ArrayList<Vertex> vertex, String[] vertices) {
+	private static void linkCreation(Graph graph, ArrayList<Vertex> vertex, String[] vertices) {
 
 		String relation = vertices[1];
 		String[] link = vertices[vertices.length - 2].split("--");
@@ -97,7 +96,7 @@ public class Reader {
 	 * @param properties Liste des propriétés entre ces 2 sommets
 	 * @param relation   Type de relation du lien
 	 */
-	private void addEdge(Graph graph, ArrayList<Vertex> vertex, String direction, ArrayList<LinkProperties> properties,
+	private static void addEdge(Graph graph, ArrayList<Vertex> vertex, String direction, ArrayList<LinkProperties> properties,
 			String relation) {
 		
 		if (direction.equals(">")) {
@@ -114,14 +113,13 @@ public class Reader {
 	 * @return retourne le graphe représentant le fichier passé en paramètre
 	 * @throws IOException
 	 */
-	public Graph read() throws IOException {
+	public static Graph read(String filename) throws IOException {
+		Pattern pattern = Pattern.compile("^[A-Za-z]+\\:[A-Za-z_]+\\:((([A-Za-z]+(\\=([A-Za-z]+|[0-9]+|[A-Za-z]+ ?[0-9]+|([A-Za-z0-9]+\\,?)+))?)(\\;)?)+)?--(>|<>)\\:[A-Za-z]+");
 		Graph graph = new Graph();
 		String line = "";
-		try (BufferedReader bufferReader = new BufferedReader(new FileReader(this.f))) {
+		try (BufferedReader bufferReader = new BufferedReader(new FileReader(filename))) {
 			while ((line = bufferReader.readLine()) != null) {
-				if (Pattern.matches(
-						"^[A-Za-z]+\\:[A-Za-z_]+\\:((([A-Za-z]+(\\=([A-Za-z]+|[0-9]+|[A-Za-z]+ ?[0-9]+|([A-Za-z0-9]+\\,?)+))?)(\\;)?)+)?--(>|<>)\\:[A-Za-z]+",
-						line)) {
+				if (pattern.matcher(line) != null) {
 					String[] vertices = line.split(":");
 					ArrayList<Vertex> vertex = vertexCreation(graph, vertices);
 					linkCreation(graph, vertex, vertices);

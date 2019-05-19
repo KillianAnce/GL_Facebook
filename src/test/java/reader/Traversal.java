@@ -18,8 +18,7 @@ public class Traversal {
 
 	@BeforeAll
 	public static void setUp() throws Exception {
-		Reader reader = new Reader("src/main/resources/facebook.txt");
-		graph = reader.read();
+		graph = Reader.read("src/main/resources/facebook.txt");
 	}
 
 	/**
