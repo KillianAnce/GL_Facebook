@@ -44,6 +44,13 @@ public class Vertex {
 		return link;
 	}
 
+	/**
+	 * Ajout d'un lien en prenant compte ceux déjà existant
+	 * N'ajoute pas deux fois la même chose
+	 * 
+	 * @param lien d'un sommet donné
+	 * @return
+	 */
 	public void setLink(Link link) {
 		boolean isPresent = false;
 		for (Link arrayLink: this.link) {

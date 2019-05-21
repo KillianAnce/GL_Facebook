@@ -3,7 +3,7 @@ Anna:likes:-->:Refactoring
 Barbara:employeof:role=secretaire;hired=2000-->:BigCO
 Barbara:friend:since=2000-->:Anna
 Barbara:friend:-->:Carol
-Barbara:friend:-->:Elisabeth
+Barbara:friend:since=2001-->:Elisabeth
 Barbara:likes:-->:Refactoring
 Barbara:likes:-->:NoSQLDistilled
 Carol:employeof:-->:BigCO
@@ -12,7 +12,7 @@ Carol:likes:-->:NoSQLDistilled
 Dawn:likes:-->:NoSQLDistilled
 Dawn:friend:-->:Jill
 Jill:friend:-->:Jack
-Elisabeth:friend:-->:Jill
+Elisabeth:friend:since=2001;shared=pizza-->:Jill
 Elisabeth:likes:-->:NoSQLDistilled
 Refactoring:author:-->:Martin
 NoSQLDistilled:author:-->:Martin

@@ -48,11 +48,11 @@ public class Link {
 		} else {
 			for (LinkProperties property : this.linkProperties) {
 				try {
-					if (linkProperties.value.equals(property.value)) {
+					if (linkProperties.getValue().equals(property.getValue())) {
 						isPresent = true;
 					}
 				} catch (NullPointerException e) {
-					//
+					e.printStackTrace();
 				}
 			}
 		}
@@ -102,6 +102,17 @@ public class Link {
 	public String toString(){
 		if (linkProperties.get(0) == null) {
 			return source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel() + "\n";
+		}
+		if (linkProperties.size() >= 2) {
+			return source.getLabel() + ":" + relation + ":" +
+					linkProperties.toString()
+						.replace("[", "")
+						.replace(" ", "")
+						.replace("]", "")
+						.replace(",", ";")
+						.replace("+", ",")
+						.trim() + 
+						"--" + direction + ":" + destination.getLabel() + "\n";
 		}
 		return source.getLabel() + ":" + relation + ":" +
 		linkProperties.toString()

@@ -71,7 +71,7 @@ public class Reader {
 				}
 				break;
 			case "since":
-				o = new Since(Integer.parseInt(el[1]));
+				o = new Since(el[1]);
 				break;
 			case "role":
 				o = new Role(el[1]);
@@ -80,7 +80,6 @@ public class Reader {
 				o = new Hired(el[1]);
 				break;
 			default:
-				//
 			}
 			properties.add(o);
 		}
@@ -123,9 +122,7 @@ public class Reader {
 					String[] vertices = line.split(":");
 					ArrayList<Vertex> vertex = vertexCreation(graph, vertices);
 					linkCreation(graph, vertex, vertices);
-				} else {
-					// nothing
-				}
+				} 
 			}
 		} catch (FileNotFoundException fnfe) {
 			fnfe.printStackTrace();
