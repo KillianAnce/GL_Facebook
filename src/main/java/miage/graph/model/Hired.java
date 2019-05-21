@@ -1,5 +1,6 @@
 package miage.graph.model;
 
+
 public class Hired extends LinkProperties {
 
     private String date;
@@ -12,14 +13,14 @@ public class Hired extends LinkProperties {
     /**
      * @return Date return the d
      */
-    public String getD() {
+    public String getDate() {
         return date;
     }
 
     /**
      * @param d the d to set
      */
-    public void setD(String date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

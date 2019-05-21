@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -189,7 +187,7 @@ public class Graph {
 		Matcher mode = Pattern.compile("(mode=[A-Za-z]+)").matcher(search);
 		String traversal = "";
 		Matcher level = Pattern.compile("(niveau=[0-9]+)").matcher(search);
-		int levelTraversal = this.getAdjVertices().size();
+		int levelTraversal = this.getVertices().size();
 		Matcher link = Pattern.compile("(liens=\\([a-z]+( (<|<>|>))?((\\,?[a-z]+( (<|<>|>))?)+)?\\))").matcher(search);
 		String[] linkParameters = null;
 		Set<String> sommetsVisites = new HashSet<>();
@@ -229,7 +227,7 @@ public class Graph {
 				if (filters == null) {
 					setVertices.add(link.getSource());
 				} else {
-					if (checkFilters(link, filters)) {
+					if (Filter.checkFilters(link, filters)) {
 						setVertices.add(link.getSource());
 					}
 				}
@@ -256,7 +254,7 @@ public class Graph {
 					if (filters == null) {
 						setVertices.add(vertex);
 					} else {
-						if (checkFilters(link, filters)) {
+						if (Filter.checkFilters(link, filters)) {
 							setVertices.add(vertex);
 						}
 					}
@@ -265,82 +263,7 @@ public class Graph {
 		}
 		return setVertices;
 	}
-
-	/**
-	 * Vérifie si le lien correspond au filtre
-	 * filtres : 
-	 * 	- since
-	 *  - shared
-	 *  - role
-	 *  - hired
-	 * 
-	 * @param link      Lien entre les sommets
-	 * @param filters   Tableau des filtres
-	 * @return
-	 */
-	public boolean checkFilters(Link link, Set<String> filters) {
-		boolean match = false;
-		String[] filterArray = null;
-		int countFilters = 0;
-		for (LinkProperties linkProperty : link.getLinkProperties()) {
-			for (String filter : filters) {
-				if (linkProperty != null) {
-					filterArray = filter.split("=");
-					switch (filterArray[0]) {
-					case "since":
-						if (linkProperty.getValue().equals("Since")) {
-							Since since = (Since) linkProperty;
-							if (since.getdate() == Integer.parseInt(filterArray[1])) {
-								match = true;
-								countFilters++;
-							}
-						}
-						break;
-					case "shared":
-						if (linkProperty.getValue().equals("Shared")) {
-							int countShared = 0;
-							Shared shared = (Shared) linkProperty;
-							String[] sharedArray = filterArray[1].split(",");
-							for (String sharedString : sharedArray) {
-								if (shared.getShared().contains(sharedString)) {
-									countShared++;
-								}
-							}
-							if (countShared == sharedArray.length) {
-								match = true;
-							}
-							countFilters++;
-						}
-						break;
-					case "hired":
-						if (linkProperty.getValue().equals("Hired")) {
-							Hired hired = (Hired) linkProperty;
-							if (hired.getD().equals(filterArray[1])) {
-								match = true;
-								countFilters++;
-							}
-						}
-						break;
-					case "role":
-						if (linkProperty.getValue().equals("Role")) {
-							Role role = (Role) linkProperty;
-							if (role.getRole().equals(filterArray[1])) {
-								match = true;
-								countFilters++;
-							}
-						}
-						break;
-					}
-				}
-			}
-		}
-		if (countFilters == filters.size()) {
-			return match;
-		}
-		return false;
-
-	}
-
+	
 	/**
 	 * Vérifie si la condition des enfants permet de les ajouter à l'ensemble de
 	 * sommets
@@ -411,7 +334,7 @@ public class Graph {
 		}
 	}
 
-	public Set<Vertex> getAdjVertices() {
+	public Set<Vertex> getVertices() {
 		return this.vertices;
 	}
 

@@ -1,6 +1,8 @@
 package graphe;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +33,7 @@ public class GraphTest {
 	
 	@Test
 	public void grapheEmpty() {
-		assertThat(g.getAdjVertices().size(), is(0));
+		assertThat(g.getVertices().size(), is(0));
 	}
 
 	@Test
@@ -39,7 +41,7 @@ public class GraphTest {
 		Graph g = new Graph();
 		Vertex v = new Vertex("Thomas");
 		g.addVertex(v);
-		assertThat(g.getAdjVertices().size(), is(1));
+		assertThat(g.getVertices().size(), is(1));
 	}
 
 	@Test
@@ -97,7 +99,7 @@ public class GraphTest {
 	}
 	
 	@Test
-	public void addPropertiesWhichExists() {
+	public void addPropertiesWhichExists() throws ParseException {
 		graph.getVertex("BigCO").getLink().get(1).setLinkProperties(new Hired("2000"));
 		int count = (int) graph.getVertex("BigCO").getLink().get(1).getLinkProperties()
 				.stream()
@@ -112,7 +114,7 @@ public class GraphTest {
 	}
 	
 	@Test
-	public void addPropertyToNode() {
+	public void addPropertyToNode() throws ParseException {
 		graph.getVertex("BigCO").getLink().get(0).setLinkProperties(new Hired("2000"));
 		assertEquals("[hired=2000]",graph.getVertex("BigCO").getLink().get(0).getLinkProperties().toString());
 	}
@@ -121,7 +123,7 @@ public class GraphTest {
 	public void addPropertiesToNode() {
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Hired("2000"));
 		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Role("Bricoleur"));
-		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Since(2000));
+		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Since("2000"));
 		Set<String> set = new HashSet<String>();
 		set.add("Sport");
 		set.add("Bouffe");

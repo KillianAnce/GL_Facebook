@@ -2,9 +2,9 @@ package miage.graph.model;
 
 public class Since extends LinkProperties {
 
-    private int date;
+    private String date;
 
-    public Since (int date){
+    public Since (String date){
         super("Since");
         this.date = date;
     }
@@ -12,14 +12,14 @@ public class Since extends LinkProperties {
     /**
      * @return int return the date
      */
-    public int getdate() {
+    public String getdate() {
         return date;
     }
 
     /**
      * @param date the date to set
      */
-    public void setdate(int date) {
+    public void setdate(String date) {
         this.date = date;
     }
 
