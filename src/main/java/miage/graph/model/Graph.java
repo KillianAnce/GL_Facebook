@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,7 +26,7 @@ public class Graph {
 	/**
 	 * Ajoute un sommet au graphe
 	 * 
-	 * @param vertex
+	 * @param vertex noeud
 	 * @return
 	 */
 	public Vertex addVertex(Vertex vertex) {
@@ -84,9 +86,15 @@ public class Graph {
 
 	/**
 	 * 
-	 * @param linkParameters
-	 * @param relation
-	 * @param index
+	 * Permet de matcher les relations Le premier pour les relations de type name +
+	 * (<|>) Exemple : friend >
+	 * 
+	 * Le deuxième pour les relations sans indication de sens
+	 * 
+	 * 
+	 * @param linkParameters 
+	 * @param relation			relation entre les deux individus (friend par exemple)
+	 * @param index				index du tableau
 	 * @return
 	 */
 	public String[] matcher(String[] linkParameters, String[] relation, int index) {
@@ -109,7 +117,8 @@ public class Graph {
 	 * @param level    Niveau de largeur
 	 * @return
 	 */
-	public Set<String> breadthFirstTraversal(String root, Set<String> visited, String[] relation, int level) {
+	public Set<String> breadthFirstTraversal(String root, Set<String> visited, String[] relation, int level,
+			Set<String> filters) {
 		Queue<String> queue = new LinkedList<>();
 		queue.add(root);
 		visited.add(root);
@@ -122,7 +131,7 @@ public class Graph {
 				String[] linkParameters = { null, "<>" };
 				linkParameters = matcher(linkParameters, relation, index);
 				for (Vertex v : this.getAdjVerticesOfVertex(this.getVertex(vertex), linkParameters[1],
-						linkParameters[0])) {
+						linkParameters[0], filters)) {
 					visited.add(v.getLabel());
 					queue.add(v.getLabel());
 				}
@@ -142,36 +151,41 @@ public class Graph {
 	 * @param visited  L'ensemble des sommets qui sont visités par l'algorithme
 	 * @param relation Le type de relation qu
 	 * @param level    Niveau de profondeur demandé
-	 * @param idx
+	 * @param index    Index du tableau
+	 * @param newIndex Nouvel index au moment de l'appel récursif
+	 * @param newLevel Décrementation du niveau
 	 * @return
 	 */
-	public Set<String> depthFirstTraversal(String root, Set<String> visited, String[] relation, int level, int idx) {
+	public Set<String> depthFirstTraversal(String root, Set<String> visited, String[] relation, int level, int index,
+			Set<String> filters) {
 		String[] linkParameters = { null, "<>" };
-		linkParameters = matcher(linkParameters, relation, idx);
+		linkParameters = matcher(linkParameters, relation, index);
 		visited.add(this.getVertex(root).getLabel());
-		Iterator<Vertex> i = this.getAdjVerticesOfVertex(this.getVertex(root), linkParameters[1], linkParameters[0])
-				.iterator();
+		Iterator<Vertex> i = this
+				.getAdjVerticesOfVertex(this.getVertex(root), linkParameters[1], linkParameters[0], filters).iterator();
 		while (i.hasNext() && level > 0) {
 			Vertex v = i.next();
 			String suivant = v.getLabel();
-			int lx = idx;
-			int l = level - 1;
-			if (lx < relation.length - 1) {
-				lx++;
+			int newIndex = index;
+			int newLevel = level - 1;
+			if (newIndex < relation.length - 1) {
+				newIndex++;
 			}
-			depthFirstTraversal(suivant, visited, relation, l, lx);
+			depthFirstTraversal(suivant, visited, relation, newLevel, newIndex, filters);
 		}
 		return visited;
 	}
 
 	/**
-	 * Méthode de recherche permettant de
+	 * Méthode de recherche permettant de rechercher des elements à partir de
+	 * critères définis : - niveau - liens - mode de parcours
 	 * 
-	 * @param start
-	 * @param search
+	 * @param start    Noeud de départ de la recherche
+	 * @param search   La recherche sous forme d'une chaine de caractère
+	 * @param filters  Tableau de filtres
 	 * @return
 	 */
-	public Set<String> search(String start, String search) {
+	public Set<String> search(String start, String search, Set<String> filters) {
 		Matcher mode = Pattern.compile("(mode=[A-Za-z]+)").matcher(search);
 		String traversal = "";
 		Matcher level = Pattern.compile("(niveau=[0-9]+)").matcher(search);
@@ -191,24 +205,34 @@ public class Graph {
 		}
 
 		if (traversal.equals("profondeur")) {
-			this.depthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal, 0);
+			this.depthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal, 0, filters);
 		} else {
-			this.breadthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal);
+			this.breadthFirstTraversal(start, sommetsVisites, linkParameters, levelTraversal, filters);
 		}
 		return sommetsVisites;
 	}
 
 	/**
 	 * 
-	 * @param setVertices
-	 * @param startingVertex
-	 * @param linkParameter
+	 * Permet de récupérer les noeuds parents du noeud courant tout en satisfaisant
+	 * les contraintes de filtres, parametres
+	 * 
+	 * @param setVertices      Tableau qui contient les sommets visités
+	 * @param startingVertex   Noeud de départ à partir duquel on récupère les liens
+	 * @param linkParameter    Paramètres de liens
 	 * @return
 	 */
-	public Set<Vertex> addAdjacentVertex(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter) {
+	public Set<Vertex> getAdjacentVertexParent(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
+			Set<String> filters) {
 		for (Link link : startingVertex.getLink()) {
 			if (link.getRelation().equals(linkParameter)) {
-				setVertices.add(link.getSource());
+				if (filters == null) {
+					setVertices.add(link.getSource());
+				} else {
+					if (checkFilters(link, filters)) {
+						setVertices.add(link.getSource());
+					}
+				}
 			}
 		}
 		return setVertices;
@@ -216,32 +240,119 @@ public class Graph {
 
 	/**
 	 * 
-	 * @param setVertices
-	 * @param startingVertex
-	 * @param linkParameter
+	 * Permet de récupérer les noeuds fils
+	 * 
+	 * @param setVertices      Tableau qui contient les sommets visités
+	 * @param startingVertex   Noeud de départ à partir duquel on récupère les liens
+	 * @param linkParameter    Paramètres de liens
 	 * @return
 	 */
-	public Set<Vertex> addAdjacentVertexChildren(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
-			String direction) {
+	public Set<Vertex> getAdjacentVertexChildren(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
+			String direction, Set<String> filters) {
 
 		for (Vertex vertex : startingVertex.getChildren()) {
 			for (Link link : vertex.getLink()) {
-				if (checkConditionAdjacentVertexChildren(link, direction, startingVertex, linkParameter)) 
-					setVertices.add(vertex);
+				if (checkConditionAdjacentVertexChildren(link, direction, startingVertex, linkParameter)) {
+					if (filters == null) {
+						setVertices.add(vertex);
+					} else {
+						if (checkFilters(link, filters)) {
+							setVertices.add(vertex);
+						}
+					}
+				}
 			}
 		}
 		return setVertices;
 	}
 
 	/**
-	 * Check si la condition des enfants permet de les ajouter à l'ensemble de sommets
-	 * @param link
-	 * @param direction
-	 * @param startingVertex
-	 * @param linkParameter
+	 * Vérifie si le lien correspond au filtre
+	 * filtres : 
+	 * 	- since
+	 *  - shared
+	 *  - role
+	 *  - hired
+	 * 
+	 * @param link      Lien entre les sommets
+	 * @param filters   Tableau des filtres
 	 * @return
 	 */
-	public boolean checkConditionAdjacentVertexChildren(Link link, String direction, Vertex startingVertex, String linkParameter) {
+	public boolean checkFilters(Link link, Set<String> filters) {
+		boolean match = false;
+		String[] filterArray = null;
+		int countFilters = 0;
+		for (LinkProperties linkProperty : link.getLinkProperties()) {
+			for (String filter : filters) {
+				if (linkProperty != null) {
+					filterArray = filter.split("=");
+					switch (filterArray[0]) {
+					case "since":
+						if (linkProperty.getValue().equals("Since")) {
+							Since since = (Since) linkProperty;
+							if (since.getdate() == Integer.parseInt(filterArray[1])) {
+								match = true;
+								countFilters++;
+							}
+						}
+						break;
+					case "shared":
+						if (linkProperty.getValue().equals("Shared")) {
+							int countShared = 0;
+							Shared shared = (Shared) linkProperty;
+							String[] sharedArray = filterArray[1].split(",");
+							for (String sharedString : sharedArray) {
+								if (shared.getShared().contains(sharedString)) {
+									countShared++;
+								}
+							}
+							if (countShared == sharedArray.length) {
+								match = true;
+							}
+							countFilters++;
+						}
+						break;
+					case "hired":
+						if (linkProperty.getValue().equals("Hired")) {
+							Hired hired = (Hired) linkProperty;
+							if (hired.getD().equals(filterArray[1])) {
+								match = true;
+								countFilters++;
+							}
+						}
+						break;
+					case "role":
+						if (linkProperty.getValue().equals("Role")) {
+							Role role = (Role) linkProperty;
+							if (role.getRole().equals(filterArray[1])) {
+								match = true;
+								countFilters++;
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		if (countFilters == filters.size()) {
+			return match;
+		}
+		return false;
+
+	}
+
+	/**
+	 * Vérifie si la condition des enfants permet de les ajouter à l'ensemble de
+	 * sommets
+	 * 
+	 * @param link           Lien entre les deux sommets
+	 * @param direction      Sens du lien
+	 * @param startingVertex Sommet de départ
+	 * @param linkParameter  L'intitulé du lien
+	 * @return
+	 */
+	public boolean checkConditionAdjacentVertexChildren(Link link, String direction, Vertex startingVertex,
+			String linkParameter) {
 		boolean sameParameter = link.getRelation().equals(linkParameter);
 		boolean isTrue = false;
 		if (direction.equals(">")) {
@@ -260,23 +371,25 @@ public class Graph {
 	 * paramètre
 	 * 
 	 * @param startingVertex sommet de départ
-	 * @param direction
-	 * @param linkParameter
+	 * @param direction      sens du lien
+	 * @param linkParameter  l'intitulé du lien
+	 * @param filters        tableau de filtres exemple : since=2000
 	 * @return
 	 */
-	public Set<Vertex> getAdjVerticesOfVertex(Vertex startingVertex, String direction, String linkParameter) {
+	public Set<Vertex> getAdjVerticesOfVertex(Vertex startingVertex, String direction, String linkParameter,
+			Set<String> filters) {
 		Set<Vertex> setVertices = new HashSet<>();
 
 		switch (direction) {
 		case ">":
-			addAdjacentVertexChildren(setVertices, startingVertex, linkParameter, ">");
+			getAdjacentVertexChildren(setVertices, startingVertex, linkParameter, ">", filters);
 			break;
 		case "<":
-			addAdjacentVertex(setVertices, startingVertex, linkParameter);
+			getAdjacentVertexParent(setVertices, startingVertex, linkParameter, filters);
 			break;
 		default:
-			addAdjacentVertexChildren(setVertices, startingVertex, linkParameter, "");
-			addAdjacentVertex(setVertices, startingVertex, linkParameter);
+			getAdjacentVertexChildren(setVertices, startingVertex, linkParameter, "", filters);
+			getAdjacentVertexParent(setVertices, startingVertex, linkParameter, filters);
 			break;
 
 		}

@@ -48,11 +48,11 @@ public class Link {
 		} else {
 			for (LinkProperties property : this.linkProperties) {
 				try {
-					if (linkProperties.value.equals(property.value)) {
+					if (linkProperties.getValue().equals(property.getValue())) {
 						isPresent = true;
 					}
 				} catch (NullPointerException e) {
-					//
+					e.printStackTrace();
 				}
 			}
 		}

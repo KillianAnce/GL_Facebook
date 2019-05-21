@@ -49,8 +49,8 @@ public class GraphTest {
 		Vertex v1 = new Vertex("Killian");
 		g.addVertex(v);
 		g.addVertex(v1);
-		assertEquals(false, g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1));
-		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v));
+		assertEquals(false, g.getAdjVerticesOfVertex(v, ">", "friend", null).contains(v1));
+		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend", null).contains(v));
 		
 	}
 
@@ -62,8 +62,8 @@ public class GraphTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addSingleEdge(v, v1, ">", null, "friend");
-		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1));
-		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v));
+		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend", null).contains(v1));
+		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend", null).contains(v));
 	}
 
 	@Test
@@ -74,8 +74,8 @@ public class GraphTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addMutualEdge(v, v1, "<>", null, "friend");
-		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend").contains(v1));
-		assertEquals(true, g.getAdjVerticesOfVertex(v1, ">", "friend").contains(v));
+		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend", null).contains(v1));
+		assertEquals(true, g.getAdjVerticesOfVertex(v1, ">", "friend", null).contains(v));
 	}
 	
 	@Test

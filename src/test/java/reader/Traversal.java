@@ -28,32 +28,32 @@ public class Traversal {
 	@Test
 	public void DescendantFriendshipLevel1() {
 		Set<String> sommetsVisites = new HashSet<String>();
-		assertEquals(true, graph.breadthFirstTraversal("Barbara", sommetsVisites, params, 1).contains("Carol"));
+		assertEquals(true, graph.breadthFirstTraversal("Barbara", sommetsVisites, params, 1, null).contains("Carol"));
 	}
 
 	@Test
 	public void DescendantFriendshipLevel2() {
 		Set<String> sommetsVisites = new HashSet<String>();
-		assertEquals(true, graph.breadthFirstTraversal("Barbara",sommetsVisites,params, 2).contains("Dawn"));
+		assertEquals(true, graph.breadthFirstTraversal("Barbara",sommetsVisites,params, 2, null).contains("Dawn"));
 		sommetsVisites.clear();
-		assertEquals(true, graph.breadthFirstTraversal("Barbara",sommetsVisites, params, 2).contains("Jill"));
+		assertEquals(true, graph.breadthFirstTraversal("Barbara",sommetsVisites, params, 2, null).contains("Jill"));
 		sommetsVisites.clear();
-		assertEquals(true, graph.depthFirstTraversal("Barbara", sommetsVisites, params, 2, 0).contains("Jill"));
+		assertEquals(true, graph.depthFirstTraversal("Barbara", sommetsVisites, params, 2, 0, null).contains("Jill"));
 		sommetsVisites.clear();
-		assertEquals(false, graph.depthFirstTraversal("Barbara", sommetsVisites, params, 2, 0).contains("Jack"));
+		assertEquals(false, graph.depthFirstTraversal("Barbara", sommetsVisites, params, 2, 0, null).contains("Jack"));
 	}
  
 	@Test
 	public void DescendantFriendshipLevel3() {
 		Set<String> sommetsVisites = new HashSet<String>();
-		assertEquals(true, graph.breadthFirstTraversal("Barbara", sommetsVisites, params, 3).contains("Jill"));
+		assertEquals(true, graph.breadthFirstTraversal("Barbara", sommetsVisites, params, 3, null).contains("Jill"));
 		sommetsVisites.clear();
-		assertEquals(true, graph.depthFirstTraversal("Barbara", sommetsVisites, params, 3, 0).contains("Jack"));
+		assertEquals(true, graph.depthFirstTraversal("Barbara", sommetsVisites, params, 3, 0, null).contains("Jack"));
 	}
 	
 	@Test
 	public void NotDescendantFriendship() {
 		Set<String> sommetsVisites = new HashSet<String>();
-		assertEquals(false, graph.breadthFirstTraversal("Barbara",sommetsVisites, params, 2).contains("testPerson"));
+		assertEquals(false, graph.breadthFirstTraversal("Barbara",sommetsVisites, params, 2, null).contains("testPerson"));
 	}
 }
