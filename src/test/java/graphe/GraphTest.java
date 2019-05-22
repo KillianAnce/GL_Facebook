@@ -184,4 +184,22 @@ public class GraphTest {
 			graph.addProperties("Refactoring", "Rene", set);
 		  });
 	}
+	
+	@Test
+	public void RemoveLink() {
+		graph.removeLink("Barbara", "BigCO");
+		assertEquals(null, graph.getVertex("Barbara").getLinkVertex("BigCO"));
+	}
+	
+	@Test
+	public void RemoveVertex() {
+		graph.removeVertex("Barbara");
+		assertEquals(null, graph.getVertex("Barbara"));
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.getVertex("Barbara").getParents();
+		  });
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.getVertex("Barbara").getLink();
+		  });
+	}
 }
