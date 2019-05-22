@@ -36,7 +36,7 @@ public class FileLoaderController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choisir un fichier");
 		File file = fileChooser.showOpenDialog(new Stage());
-		
+	
 		if (file == null)
 			return;
 		try {
@@ -67,6 +67,7 @@ public class FileLoaderController {
             e.printStackTrace();
         }
 	}
+
 
 	public static Graph getGraph() {
 		return graph;
