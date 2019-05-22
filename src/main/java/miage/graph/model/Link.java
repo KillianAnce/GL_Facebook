@@ -101,28 +101,28 @@ public class Link {
 	}
 
 	/**
-	 * @return Vertex return the source
+	 * @return Vertex Retourne le sommet source du lien
 	 */
 	public Vertex getSource() {
 		return source;
 	}
 
 	/**
-	 * @param source the source to set
+	 * @param source Ajouter le sommet de source du lien
 	 */
 	public void setSource(Vertex source) {
 		this.source = source;
 	}
 
 	/**
-	 * @return Vertex return the destination
+	 * @return Vertex Retourne le sommet de destination du lien
 	 */
 	public Vertex getDestination() {
 		return destination;
 	}
 
 	/**
-	 * @param destination the destination to set
+	 * @param destination Ajouter le sommet de destination du lien
 	 */
 	public void setDestination(Vertex destination) {
 		this.destination = destination;

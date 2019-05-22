@@ -12,13 +12,13 @@ public class GraphController {
 	@FXML
 	private AnchorPane anchorPane;
 	private Graph graph;
-	private GraphUI UI;
+	private GraphUI userInterface;
 
 	@FXML
 	public void initialize() {
 		graph = FileLoaderController.getGraph();
-		UI = new GraphUI();
-		UI.createUI(swingNode, graph, anchorPane);
+		userInterface = new GraphUI();
+		userInterface.createUI(swingNode, graph, anchorPane);
 	}
 
 }

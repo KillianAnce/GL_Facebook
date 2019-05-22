@@ -27,6 +27,7 @@ public class GraphTest {
 
 	@Test
 	public void grapheEmpty() {
+		Graph g = new Graph();
 		assertThat(g.getVertices().size(), is(0));
 	}
 

@@ -25,7 +25,7 @@ public class FileLoaderController {
 	@FXML
 	private Button showGraph;
 	@FXML
-	private Label file;
+	private Label filePath;
 
 	/**
 	 * Permet d'ouvrir le fichier 

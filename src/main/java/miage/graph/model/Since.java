@@ -10,14 +10,14 @@ public class Since extends LinkProperties {
     }
 
     /**
-     * @return int return the date
+     * @return int Retourne la date
      */
     public String getdate() {
         return date;
     }
 
     /**
-     * @param date the date to set
+     * @param date Ajouter/Modifier la date de la propriété
      */
     public void setdate(String date) {
         this.date = date;

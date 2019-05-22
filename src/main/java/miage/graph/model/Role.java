@@ -10,14 +10,14 @@ public class Role extends LinkProperties {
     }
 
     /**
-     * @return String return the role
+     * @return String Retourne le role
      */
     public String getRole() {
         return role;
     }
 
     /**
-     * @param role the role to set
+     * @param role Ajouter/Modifier le role de la propriété
      */
     public void setRole(String role) {
         this.role = role;

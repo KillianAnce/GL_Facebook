@@ -11,14 +11,14 @@ public class Hired extends LinkProperties {
     }
 
     /**
-     * @return Date return the d
+     * @return Date Retourne la date
      */
     public String getDate() {
         return date;
     }
 
     /**
-     * @param d the d to set
+     * @param d Ajouter/Modifier la date de la propriété
      */
     public void setDate(String date) {
         this.date = date;

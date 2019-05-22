@@ -41,7 +41,7 @@ public class Graph {
 	 * @param label nom du sommet désiré
 	 * @return
 	 */
-	public Vertex getVertex(String label) throws NullPointerException {
+	public Vertex getVertex(String label) {
 		for (Vertex vertex : vertices) {
 			if (vertex.getLabel().equals(label)) {
 				return vertex;
@@ -49,19 +49,20 @@ public class Graph {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Permet de renommer un sommet uniquement si le nom
-	 * choisi n'est pas déjà existant
-	 * @param name 		Nom du sommet à remplacer
-	 * @param newName	Nouveau nom
+	 * Permet de renommer un sommet uniquement si le nom choisi n'est pas déjà
+	 * existant
+	 * 
+	 * @param name    Nom du sommet à remplacer
+	 * @param newName Nouveau nom
 	 */
 	public void renameVertex(String name, String newName) {
 		if (!this.vertices.contains(this.getVertex(newName))) {
 			this.getVertex(name).setLabel(newName);
 		}
 	}
-	
+
 	public void modifyRelation(String vertexSource, String vertexDestination, String newRelation) {
 		this.getVertex(vertexSource).getLinkVertex(vertexDestination).setRelation(newRelation);
 	}
@@ -94,11 +95,11 @@ public class Graph {
 	}
 
 	/**
-	 * Méthode pour supprimer un sommet
-	 * Doit d'abord supprimer les liens qui pointe sur lui
-	 * Doit ensuite supprimer ses liens
-	 * Doit enfin supprimer le sommet de la liste des sommets du graphe 
-	 * @param vertex  Sommet qui doit etre supprimé
+	 * Méthode pour supprimer un sommet Doit d'abord supprimer les liens qui pointe
+	 * sur lui Doit ensuite supprimer ses liens Doit enfin supprimer le sommet de la
+	 * liste des sommets du graphe
+	 * 
+	 * @param vertex Sommet qui doit etre supprimé
 	 */
 	public void removeVertex(String vertex) {
 		for (Vertex parent : this.getVertex(vertex).getParents()) {
@@ -110,13 +111,12 @@ public class Graph {
 
 	/**
 	 * Méthode de suppression de lien entre 2 sommets
-	 * @param vertexSource 			Sommet source
-	 * @param vertexDestination		Sommet de destination
+	 * 
+	 * @param vertexSource      Sommet source
+	 * @param vertexDestination Sommet de destination
 	 */
 	public void removeLink(String vertexSource, String vertexDestination) {
-		this.getVertex(vertexSource).getLink()
-			.remove(this.getVertex(vertexSource)
-					.getLinkVertex(vertexDestination));
+		this.getVertex(vertexSource).getLink().remove(this.getVertex(vertexSource).getLinkVertex(vertexDestination));
 	}
 
 	/**
@@ -282,10 +282,8 @@ public class Graph {
 				if (link.getRelation().equals(linkParameter)) {
 					if (filters == null) {
 						setVertices.add(link.getSource());
-					} else {
-						if (Filter.checkFilters(link, filters)) {
-							setVertices.add(link.getSource());
-						}
+					} else if (Filter.checkFilters(link, filters)) {
+						setVertices.add(link.getSource());
 					}
 				}
 			}

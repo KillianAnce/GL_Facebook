@@ -11,6 +11,11 @@ public class Shared extends LinkProperties {
         this.shared = new HashSet<>();
     }
     
+    /**
+     * Constructeur utilisé dans la création d'un graphe à partir
+     * du fichier d'import
+     * @param shared
+     */
     public Shared(Set<String> shared){
         super("Shared");
         this.shared = shared;
