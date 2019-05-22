@@ -62,7 +62,8 @@ public class Graph {
 	public void addSingleEdge(Vertex source, Vertex destination, String direction, List<LinkProperties> properties,
 			String relation) {
 		source.setParentChildren(destination);
-		destination.setLink(new Link(source, direction, properties, relation, destination));
+		source.setLink(new Link(source, direction, properties, relation, destination));
+//		destination.setLink(new Link(source, direction, properties, relation, destination));
 	}
 
 	/**
@@ -78,8 +79,8 @@ public class Graph {
 			String relation) {
 		v1.setParentChildren(v2);
 		v2.setParentChildren(v1);
-		v1.setLink(new Link(v2, direction, properties, relation, v1));
-		v2.setLink(new Link(v1, direction, properties, relation, v2));
+		v1.setLink(new Link(v1, direction, properties, relation, v2));
+		v2.setLink(new Link(v2, direction, properties, relation, v1));
 	}
 
 	/**
@@ -222,13 +223,16 @@ public class Graph {
 	 */
 	public Set<Vertex> getAdjacentVertexParent(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
 			Set<String> filters) {
-		for (Link link : startingVertex.getLink()) {
-			if (link.getRelation().equals(linkParameter)) {
-				if (filters == null) {
-					setVertices.add(link.getSource());
-				} else {
-					if (Filter.checkFilters(link, filters)) {
+		
+		for (Vertex vertex : startingVertex.getParents()) {
+			for (Link link : vertex.getLink()) {
+				if (link.getRelation().equals(linkParameter)) {
+					if (filters == null) {
 						setVertices.add(link.getSource());
+					} else {
+						if (Filter.checkFilters(link, filters)) {
+							setVertices.add(link.getSource());
+						}
 					}
 				}
 			}
@@ -248,19 +252,19 @@ public class Graph {
 	public Set<Vertex> getAdjacentVertexChildren(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
 			String direction, Set<String> filters) {
 
-		for (Vertex vertex : startingVertex.getChildren()) {
-			for (Link link : vertex.getLink()) {
+//		for (Vertex vertex : startingVertex.getChildren()) {
+			for (Link link : startingVertex.getLink()) {
 				if (checkConditionAdjacentVertexChildren(link, direction, startingVertex, linkParameter)) {
 					if (filters == null) {
-						setVertices.add(vertex);
+						setVertices.add(link.getDestination());
 					} else {
 						if (Filter.checkFilters(link, filters)) {
-							setVertices.add(vertex);
+							setVertices.add(link.getDestination());
 						}
 					}
 				}
 			}
-		}
+//		}
 		return setVertices;
 	}
 	
