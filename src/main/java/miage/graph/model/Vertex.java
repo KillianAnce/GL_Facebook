@@ -44,6 +44,19 @@ public class Vertex {
 		return link;
 	}
 
+	public Link getLinkVertex(String destination) {
+		Link linkVertex = null;
+		for (Link link : this.link) {
+			if (link.getDestination().getLabel().equals(destination)) {
+				linkVertex = link;
+				break;	
+			}				
+		}
+		
+		return linkVertex;
+	}
+	
+	
 	/**
 	 * Ajout d'un lien en prenant compte ceux déjà existant
 	 * N'ajoute pas deux fois la même chose
@@ -66,6 +79,6 @@ public class Vertex {
 
 	@Override
 	public String toString() {
-		return "" + link;
+		return "" + this.link;
 	}
 }
