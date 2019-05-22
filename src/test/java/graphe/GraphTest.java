@@ -197,4 +197,34 @@ public class GraphTest {
 			graph.getVertex("Barbara").getLink();
 		  });
 	}
+	
+	@Test
+	public void RemoveVertexWithChildVerification() {
+		graph.removeVertex("Carol");
+		assertEquals(null, graph.getVertex("Carol"));
+		assertEquals(null, graph.getVertex("Barbara").getLinkVertex("Carol"));
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.getVertex("Carol").getLink();
+		  });
+	}
+	
+	@Test
+	public void NodeRenamingByExistentName() {
+		graph.renameVertex("NoSQLDistilled", "Dawn");
+		assertEquals(graph.getVertices().contains(graph.getVertex("NoSQLDistilled")), true);
+	}
+	
+	@Test
+	public void NodeRenamingByNonExistentName() {
+		graph.renameVertex("NoSQLDistilled", "Toto");
+		assertEquals(null, graph.getVertex("NoSQLDistilled"));
+		assertEquals(graph.getVertices().contains(graph.getVertex("Toto")), true);
+	}
+	
+	@Test
+	public void renameRelation() {
+		graph.modifyRelation("Barbara", "Anna", "coloc");
+		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation(), "coloc");
+		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation().equals("friend"),false);
+	}
 }
