@@ -49,6 +49,18 @@ public class Graph {
 		}
 		return null;
 	}
+	
+	/**
+	 * Permet de renommer un sommet uniquement si le nom
+	 * choisi n'est pas déjà existant
+	 * @param name 		Nom du sommet à remplacer
+	 * @param newName	Nouveau nom
+	 */
+	public void renameVertex(String name, String newName) {
+		if (!this.vertices.contains(this.getVertex(newName))) {
+			this.getVertex(name).setLabel(newName);
+		}
+	}
 
 	/**
 	 * 
@@ -76,6 +88,13 @@ public class Graph {
 		source.setLink(new Link(source, direction, properties, relation, destination));
 	}
 
+	/**
+	 * Méthode pour supprimer un sommet
+	 * Doit d'abord supprimer les liens qui pointe sur lui
+	 * Doit ensuite supprimer ses liens
+	 * Doit enfin supprimer le sommet de la liste des sommets du graphe 
+	 * @param vertex  Sommet qui doit etre supprimé
+	 */
 	public void removeVertex(String vertex) {
 		for (Vertex parent : this.getVertex(vertex).getParents()) {
 			parent.getLink().remove(parent.getLinkVertex(vertex));
