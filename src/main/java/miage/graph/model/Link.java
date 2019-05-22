@@ -2,7 +2,6 @@ package miage.graph.model;
 
 import java.util.List;
 
-
 public class Link {
 
 	private Vertex source;
@@ -10,7 +9,7 @@ public class Link {
 	private List<LinkProperties> linkProperties;
 	private String relation;
 	private Vertex destination;
-	
+
 	public Link(Vertex source, String direction, List<LinkProperties> properties, String relation, Vertex destination) {
 		this.source = source;
 		this.direction = direction;
@@ -18,7 +17,7 @@ public class Link {
 		this.relation = relation;
 		this.destination = destination;
 	}
-	
+
 	public String getDirection() {
 		return direction;
 	}
@@ -34,29 +33,29 @@ public class Link {
 	/**
 	 * Méthode permettant d'ajouter des propriétés à un lien
 	 * 
-	 * Remarque : 
-	 * - Si le lien n'avait pas de propriété lors de sa création,
-	 * la liste contient une valeur null en 1ere entrée
+	 * Remarque : - Si le lien n'avait pas de propriété lors de sa création, la
+	 * liste contient une valeur null en 1ere entrée
 	 * 
 	 * L'ajout vérifie aussi que la liste ne contient pas cette valeur
+	 * 
 	 * @param linkProperties
 	 */
 	public void setLinkProperties(LinkProperties linkProperties) {
 		boolean isPresent = false;
-		if (this.linkProperties.get(0)==null) {
+		if (this.linkProperties.get(0) == null) {
 			this.linkProperties.clear();
 		} else {
 			for (LinkProperties property : this.linkProperties) {
 				try {
-					if (linkProperties.value.equals(property.value)) {
+					if (linkProperties.getValue().equals(property.getValue())) {
 						isPresent = true;
 					}
 				} catch (NullPointerException e) {
-					//
+					e.printStackTrace();
 				}
 			}
 		}
-		
+
 		if (!isPresent) {
 			this.linkProperties.add(linkProperties);
 		}
@@ -70,48 +69,53 @@ public class Link {
 		this.relation = name;
 	}
 
-    /**
-     * @return Vertex return the source
-     */
-    public Vertex getSource() {
-        return source;
-    }
-
-    /**
-     * @param source the source to set
-     */
-    public void setSource(Vertex source) {
-        this.source = source;
-    }
-
-    /**
-     * @return Vertex return the destination
-     */
-    public Vertex getDestination() {
-        return destination;
-    }
-
-    /**
-     * @param destination the destination to set
-     */
-    public void setDestination(Vertex destination) {
-        this.destination = destination;
+	/**
+	 * @return Vertex return the source
+	 */
+	public Vertex getSource() {
+		return source;
 	}
-	
+
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(Vertex source) {
+		this.source = source;
+	}
+
+	/**
+	 * @return Vertex return the destination
+	 */
+	public Vertex getDestination() {
+		return destination;
+	}
+
+	/**
+	 * @param destination the destination to set
+	 */
+	public void setDestination(Vertex destination) {
+		this.destination = destination;
+	}
+
 	@Override
-	public String toString(){
-		if (linkProperties.get(0) == null) {
-			return source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel() + "\n";
+	public String toString() {
+		String toString = "";
+		if (linkProperties == null) {
+			toString = source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel()
+					+ "\n";
+		} else {
+			if (linkProperties.size() >= 2) {
+				toString = source.getLabel()
+						+ ":" + relation + ":" + linkProperties.toString().replace("[", "").replace(" ", "")
+								.replace("]", "").replace(",", ";").replace("+", ",").trim()
+						+ "--" + direction + ":" + destination.getLabel() + "\n";
+			} else {
+				toString = source.getLabel() + ":" + relation + ":"
+						+ linkProperties.toString().replace("[", "").replace(" ", "").replace("]", "").replace(",", ";")
+								.replace("+", ",").trim()
+						+ ":" + "--" + direction + ":" + destination.getLabel() + "\n";
+			}
 		}
-		return source.getLabel() + ":" + relation + ":" +
-		linkProperties.toString()
-			.replace("[", "")
-			.replace(" ", "")
-			.replace("]", "")
-			.replace(",", ";")
-			.replace("+", ",")
-			.trim() + 
-			":" + "--" + direction + ":" + destination.getLabel() + "\n";
+		return toString;
 	}
-
 }

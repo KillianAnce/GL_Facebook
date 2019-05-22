@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet,
-				graph.search("Databases","mode=profondeur,liens=(category <,author,author <,likes <),niveau=4"));
+				graph.search("Databases","mode=profondeur,liens=(category <,author,author <,likes <),niveau=4", null));
 	}
 	
 	@Test
@@ -39,7 +40,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("NoSQLDistilled","mode=profondeur,liens=(likes <,friend),niveau=4"));
+				graph.search("NoSQLDistilled","mode=profondeur,liens=(likes <,friend),niveau=4", null));
 	}
 	
 	@Test
@@ -49,7 +50,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("Carol","mode=profondeur,liens=(friend)"));
+				graph.search("Carol","mode=profondeur,liens=(friend)", null));
 	
 	}
 	
@@ -60,7 +61,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("Carol","mode=profondeur,liens=(friend),niveau=1"));
+				graph.search("Carol","mode=profondeur,liens=(friend),niveau=1", null));
 	
 	}
 	
@@ -71,7 +72,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("Carol","mode=profondeur,liens=(friend >),niveau=2"));
+				graph.search("Carol","mode=profondeur,liens=(friend >),niveau=2", null));
 		
 	}
 	
@@ -82,7 +83,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet,
-				graph.search("Databases","mode=largeur,liens=(category <,author,author <,likes <),niveau=4"));
+				graph.search("Databases","mode=largeur,liens=(category <,author,author <,likes <),niveau=4", null));
 	}
 	
 	@Test
@@ -92,7 +93,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("NoSQLDistilled","mode=largeur,liens=(likes <,friend),niveau=4"));
+				graph.search("NoSQLDistilled","mode=largeur,liens=(likes <,friend),niveau=4", null));
 	}
 	
 	@Test
@@ -102,7 +103,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("Carol","mode=largeur,liens=(friend)"));
+				graph.search("Carol","mode=largeur,liens=(friend)", null));
 	
 	}
 	
@@ -113,7 +114,7 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("Carol","mode=largeur,liens=(friend),niveau=1"));
+				graph.search("Carol","mode=largeur,liens=(friend),niveau=1", null));
 	
 	}
 	
@@ -124,9 +125,105 @@ class GraphSearch {
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		
 		assertEquals(strSet, 
-				graph.search("Carol","mode=largeur,liens=(friend >),niveau=2"));
+				graph.search("Carol","mode=largeur,liens=(friend >),niveau=2", null));
 		
 	}
 	
-
+	@Test
+	void SearchDepthTraversalWithFilter() throws IOException {
+		
+		String[] strArray = {"Barbara", "Anna"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("since=2000");
+		assertEquals(strSet,
+				graph.search("Barbara","mode=profondeur,liens=(friend),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithFiltersWithHiredAndRole() throws IOException {
+		
+		String[] strArray = {"Barbara", "BigCO"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("role=secretaire");
+		filters.add("hired=2000");
+		assertEquals(strSet,
+				graph.search("Barbara","mode=profondeur,liens=(employeof),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithFiltersOnMultipleLevelWithSince() throws IOException {
+		
+		String[] strArray = {"Barbara", "Jill", "Elisabeth"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("since=2001");
+		assertEquals(strSet,
+				graph.search("Barbara","mode=profondeur,liens=(friend),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithFilterwithMultipleShared() throws IOException {
+		
+		String[] strArray = {"Carol", "Dawn"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("shared=books,music");
+		assertEquals(strSet,
+				graph.search("Carol","mode=profondeur,liens=(friend),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithFilterwithSingleShared() throws IOException {
+		
+		String[] strArray = {"Carol", "Dawn"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("shared=music");
+		assertEquals(strSet,
+				graph.search("Carol","mode=profondeur,liens=(friend),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithFilterDifferent() throws IOException {
+		
+		String[] strArray = {"Carol"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("shared=foot");
+		assertEquals(strSet,
+				graph.search("Carol","mode=profondeur,liens=(friend),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithFilterNotPresent() throws IOException {
+		
+		String[] strArray = {"Carol"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("since=2000");
+		assertEquals(strSet,
+				graph.search("Carol","mode=profondeur,liens=(friend >),niveau=4", filters));
+	}
+	
+	@Test
+	void SearchDepthTraversalWithMultipleFilter() throws IOException {
+		
+		String[] strArray = {"Elisabeth", "Jill"};
+		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
+		
+		Set<String> filters = new HashSet<String>(); 
+		filters.add("since=2001");
+		filters.add("shared=pizza");
+		assertEquals(strSet,
+				graph.search("Elisabeth","mode=profondeur,liens=(friend >),niveau=4", filters));
+	}
 }
