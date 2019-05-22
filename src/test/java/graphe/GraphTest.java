@@ -2,18 +2,14 @@ package graphe;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import miage.graph.model.Graph;
-import miage.graph.model.Hired;
-import miage.graph.model.Role;
-import miage.graph.model.Shared;
-import miage.graph.model.Since;
-import miage.graph.model.Vertex;
+import miage.graph.model.*;
 import miage.graph.utils.Reader;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -23,13 +19,12 @@ public class GraphTest {
 
 	private Graph graph;
 	private Graph g;
-	
+
 	@BeforeEach
 	public void setUp() throws Exception {
 		graph = Reader.read("src/main/resources/facebook.txt");
-		g = new Graph();
 	}
-	
+
 	@Test
 	public void grapheEmpty() {
 		assertThat(g.getVertices().size(), is(0));
@@ -52,7 +47,7 @@ public class GraphTest {
 		g.addVertex(v1);
 		assertEquals(false, g.getAdjVerticesOfVertex(v, ">", "friend", null).contains(v1));
 		assertEquals(false, g.getAdjVerticesOfVertex(v1, ">", "friend", null).contains(v));
-		
+
 	}
 
 	@Test
@@ -75,58 +70,161 @@ public class GraphTest {
 		g.addVertex(v);
 		g.addVertex(v1);
 		g.addMutualEdge(v, v1, "<>", null, "friend");
-		assertEquals(true, g.getAdjVerticesOfVertex(v, ">", "friend", null).contains(v1));
-		assertEquals(true, g.getAdjVerticesOfVertex(v1, ">", "friend", null).contains(v));
+		assertEquals(true, g.getAdjVerticesOfVertex(v, "<>", "friend", null).contains(v1));
+		assertEquals(true, g.getAdjVerticesOfVertex(v1, "<>", "friend", null).contains(v));
 	}
-	
+
 	@Test
 	public void checkPropertiesSince() {
-		assertEquals("[since=2000]",
-				graph.getVertex("Anna").getLink().get(0).getLinkProperties().toString());
+
+		int count = (int) graph.getVertex("Anna").getParents().stream()
+				.filter(parents -> parents.getLinkVertex("Anna").getLinkProperties().toString().equals("[since=2000]"))
+				.count();
+		assertThat(count, is(1));
 	}
-	
+
 	@Test
 	public void checkPropertiesRole() {
-		assertEquals("role=secretaire", 
-				graph.getVertex("BigCO").getLink().get(1).getLinkProperties().get(0).toString());
+
+		Set<String> set = new HashSet<String>();
+		set.add("role=secretaire");
+		
+		int count = (int) graph.getVertex("Barbara").getLink().stream()
+				.filter(parents -> Filter.checkFilters(parents, set)).count();
+		assertThat(count, is(1));
+		
+		count = (int) graph.getVertex("BigCO").getParents().stream().filter(
+				parents -> Filter.checkFilters(parents.getLinkVertex("BigCO"), set))
+				.count();
+		assertThat(count, is(1));
 	}
-	
+
 	@Test
 	public void checkPropertiesHired() {
-		assertEquals("hired=2000", 
-				graph.getVertex("BigCO").getLink().get(1).getLinkProperties().get(1).toString());
+		Set<String> set = new HashSet<String>();
+		set.add("hired=2000");
+		int count = (int) graph.getVertex("BigCO").getParents().stream()
+				.filter(parents -> Filter.checkFilters(parents.getLinkVertex("BigCO"), set)).count();
+		assertThat(count, is(1));
 	}
-	
+
 	@Test
-	public void addPropertiesWhichExists() throws ParseException {
-		graph.getVertex("BigCO").getLink().get(1).setLinkProperties(new Hired("2000"));
-		int count = (int) graph.getVertex("BigCO").getLink().get(1).getLinkProperties()
-				.stream()
-				.filter(e -> "hired=2000".equals(e.toString())).count();
+	public void addPropertiesWhichExists() {
+		Set<String> set = new HashSet<>();
+		set.add("hired=2000");
+		graph.addProperties("Barbara", "BigCO", set);
+		int count = (int) graph.getVertex("BigCO").getParents().stream()
+				.filter(parents -> Filter.checkFilters(parents.getLinkVertex("BigCO"), set)).count();
+		assertThat(count, is(1));
+	}
+
+	@Test
+	public void checkPropertiesShared() {
+		assertEquals("[shared=[books+ music]]",
+				graph.getVertex("Carol").getLinkVertex("Dawn").getLinkProperties().toString());
+	}
+
+	@Test
+	public void addPropertyToNode() {
+		Set<String> set = new HashSet<String>();
+		set.add("hired=2000");
+		graph.addProperties("Barbara", "BigCO", set);
+		int count = (int) graph.getVertex("BigCO").getParents().stream()
+				.filter(parents -> Filter.checkFilters(parents.getLinkVertex("BigCO"), set)).count();
+		assertThat(count, is(1));
+	}
+
+	@Test
+	public void addPropertiesToNode() {
+		
+		Set<String> set = new HashSet<String>();
+		set.add("shared=Bouffe,Sport");	
+		set.add("hired=2000");
+		set.add("role=Bricoleur");
+		set.add("since=2000");
+		
+		graph.addProperties("Jill", "Jack", set);
+		
+		int count = (int) graph.getVertex("Jack").getParents().stream()
+				.filter(parents -> Filter.checkFilters(parents.getLinkVertex("Jack"), set)).count();
 		assertThat(count, is(1));
 	}
 	
 	@Test
-	public void checkPropertiesShared() {
-		assertEquals("[shared=[books+ music]]",
-				graph.getVertex("Dawn").getLink().get(0).getLinkProperties().toString());
-	}
-	
-	@Test
-	public void addPropertyToNode() throws ParseException {
-		graph.getVertex("BigCO").getLink().get(0).setLinkProperties(new Hired("2000"));
-		assertEquals("[hired=2000]",graph.getVertex("BigCO").getLink().get(0).getLinkProperties().toString());
-	}
-	
-	@Test
-	public void addPropertiesToNode() {
-		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Hired("2000"));
-		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Role("Bricoleur"));
-		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Since("2000"));
+	public void LinkNotPresent() {
 		Set<String> set = new HashSet<String>();
-		set.add("Sport");
-		set.add("Bouffe");
-		graph.getVertex("Jack").getLink().get(0).setLinkProperties(new Shared(set));
-		assertEquals("shared=[Sport+ Bouffe]", (graph.getVertex("Jack").getLink().get(0).getLinkProperties().get(3).toString()));
+		set.add("shared=Bouffe,Sport");
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.addProperties("Refactoring", "Jack", set);
+		  });
+	}
+	
+	@Test
+	public void VertexSourceNotPresent() {
+		Set<String> set = new HashSet<String>();
+		set.add("shared=Bouffe,Sport");
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.addProperties("Joseph", "Jack", set);
+		  });
+	}
+	
+	@Test
+	public void VertexDestinationNotPresent() {
+		Set<String> set = new HashSet<String>();
+		set.add("shared=Bouffe,Sport");
+		
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.addProperties("Refactoring", "Rene", set);
+		  });
+	}
+	
+	@Test
+	public void RemoveLink() {
+		graph.removeLink("Barbara", "BigCO");
+		assertEquals(null, graph.getVertex("Barbara").getLinkVertex("BigCO"));
+	}
+	
+	@Test
+	public void RemoveVertex() {
+		graph.removeVertex("Barbara");
+		assertEquals(null, graph.getVertex("Barbara"));
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.getVertex("Barbara").getParents();
+		  });
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.getVertex("Barbara").getLink();
+		  });
+	}
+	
+	@Test
+	public void RemoveVertexWithChildVerification() {
+		graph.removeVertex("Carol");
+		assertEquals(null, graph.getVertex("Carol"));
+		assertEquals(null, graph.getVertex("Barbara").getLinkVertex("Carol"));
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			graph.getVertex("Carol").getLink();
+		  });
+	}
+	
+	@Test
+	public void NodeRenamingByExistentName() {
+		graph.renameVertex("NoSQLDistilled", "Dawn");
+		assertEquals(graph.getVertices().contains(graph.getVertex("NoSQLDistilled")), true);
+	}
+	
+	@Test
+	public void NodeRenamingByNonExistentName() {
+		graph.renameVertex("NoSQLDistilled", "Toto");
+		assertEquals(null, graph.getVertex("NoSQLDistilled"));
+		assertEquals(graph.getVertices().contains(graph.getVertex("Toto")), true);
+	}
+	
+	@Test
+	public void renameRelation() {
+		graph.modifyRelation("Barbara", "Anna", "coloc");
+		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation(), "coloc");
+		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation().equals("friend"),false);
 	}
 }

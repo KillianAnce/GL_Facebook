@@ -1,7 +1,8 @@
 package miage.graph.model;
 
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 public class Link {
 
@@ -10,7 +11,7 @@ public class Link {
 	private List<LinkProperties> linkProperties;
 	private String relation;
 	private Vertex destination;
-	
+
 	public Link(Vertex source, String direction, List<LinkProperties> properties, String relation, Vertex destination) {
 		this.source = source;
 		this.direction = direction;
@@ -18,7 +19,7 @@ public class Link {
 		this.relation = relation;
 		this.destination = destination;
 	}
-	
+
 	public String getDirection() {
 		return direction;
 	}
@@ -30,20 +31,49 @@ public class Link {
 	public List<LinkProperties> getLinkProperties() {
 		return linkProperties;
 	}
+	
+	/**
+	 * Méthode d'ajout de propriétés à un lien entre un noeud source
+	 * et un noeud de destination
+	 * @param properties	Tableau des propriétés
+	 */
+	public void addProperties(Set<String> properties) {
+		for (String property : properties) {
+			String[] splitProperty = property.split("=");
+			switch (splitProperty[0]) {
+			case "since":
+				this.setLinkProperties(new Since(splitProperty[1]));
+				break;
+			case "hired":
+				this.setLinkProperties(new Hired(splitProperty[1]));
+				break;
+			case "role":
+				this.setLinkProperties(new Role(splitProperty[1]));
+				break;
+			case "shared":
+				String[] shared = splitProperty[1].split(",");
+				Set<String> elementsShared = new HashSet<>();
+				for (String elementShared : shared) {
+					elementsShared.add(elementShared);
+				}
+				this.setLinkProperties(new Shared(elementsShared));				
+			}
+		}
+	}
 
 	/**
 	 * Méthode permettant d'ajouter des propriétés à un lien
 	 * 
-	 * Remarque : 
-	 * - Si le lien n'avait pas de propriété lors de sa création,
-	 * la liste contient une valeur null en 1ere entrée
+	 * Remarque : - Si le lien n'avait pas de propriété lors de sa création, la
+	 * liste contient une valeur null en 1ere entrée
 	 * 
 	 * L'ajout vérifie aussi que la liste ne contient pas cette valeur
+	 * 
 	 * @param linkProperties
 	 */
 	public void setLinkProperties(LinkProperties linkProperties) {
 		boolean isPresent = false;
-		if (this.linkProperties.get(0)==null) {
+		if (this.linkProperties.get(0) == null) {
 			this.linkProperties.clear();
 		} else {
 			for (LinkProperties property : this.linkProperties) {
@@ -56,7 +86,7 @@ public class Link {
 				}
 			}
 		}
-		
+
 		if (!isPresent) {
 			this.linkProperties.add(linkProperties);
 		}
@@ -70,59 +100,53 @@ public class Link {
 		this.relation = name;
 	}
 
-    /**
-     * @return Vertex return the source
-     */
-    public Vertex getSource() {
-        return source;
-    }
+	/**
+	 * @return Vertex return the source
+	 */
+	public Vertex getSource() {
+		return source;
+	}
 
-    /**
-     * @param source the source to set
-     */
-    public void setSource(Vertex source) {
-        this.source = source;
-    }
+	/**
+	 * @param source the source to set
+	 */
+	public void setSource(Vertex source) {
+		this.source = source;
+	}
 
-    /**
-     * @return Vertex return the destination
-     */
-    public Vertex getDestination() {
-        return destination;
-    }
+	/**
+	 * @return Vertex return the destination
+	 */
+	public Vertex getDestination() {
+		return destination;
+	}
 
-    /**
-     * @param destination the destination to set
-     */
-    public void setDestination(Vertex destination) {
-        this.destination = destination;
+	/**
+	 * @param destination the destination to set
+	 */
+	public void setDestination(Vertex destination) {
+		this.destination = destination;
 	}
 	
 	@Override
-	public String toString(){
-		if (linkProperties.get(0) == null) {
-			return source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel() + "\n";
+	public String toString() {
+		String toString = "";
+		if (linkProperties == null) {
+			toString = source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel()
+					+ "\n";
+		} else {
+			if (linkProperties.size() >= 2) {
+				toString = source.getLabel()
+						+ ":" + relation + ":" + linkProperties.toString().replace("[", "").replace(" ", "")
+								.replace("]", "").replace(",", ";").replace("+", ",").trim()
+						+ "--" + direction + ":" + destination.getLabel() + "\n";
+			} else {
+				toString = source.getLabel() + ":" + relation + ":"
+						+ linkProperties.toString().replace("[", "").replace(" ", "").replace("]", "").replace(",", ";")
+								.replace("+", ",").trim()
+						+ ":" + "--" + direction + ":" + destination.getLabel() + "\n";
+			}
 		}
-		if (linkProperties.size() >= 2) {
-			return source.getLabel() + ":" + relation + ":" +
-					linkProperties.toString()
-						.replace("[", "")
-						.replace(" ", "")
-						.replace("]", "")
-						.replace(",", ";")
-						.replace("+", ",")
-						.trim() + 
-						"--" + direction + ":" + destination.getLabel() + "\n";
-		}
-		return source.getLabel() + ":" + relation + ":" +
-		linkProperties.toString()
-			.replace("[", "")
-			.replace(" ", "")
-			.replace("]", "")
-			.replace(",", ";")
-			.replace("+", ",")
-			.trim() + 
-			":" + "--" + direction + ":" + destination.getLabel() + "\n";
+		return toString;
 	}
-
 }

@@ -26,6 +26,7 @@ public class App extends Application {
         stage = primaryStage;        
         Scene scene = new Scene(root);
         stage.setTitle("GL_Facebook");
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
 	}

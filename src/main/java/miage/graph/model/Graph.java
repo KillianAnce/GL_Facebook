@@ -41,13 +41,41 @@ public class Graph {
 	 * @param label nom du sommet désiré
 	 * @return
 	 */
-	public Vertex getVertex(String label) {
+	public Vertex getVertex(String label) throws NullPointerException {
 		for (Vertex vertex : vertices) {
 			if (vertex.getLabel().equals(label)) {
 				return vertex;
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Permet de renommer un sommet uniquement si le nom
+	 * choisi n'est pas déjà existant
+	 * @param name 		Nom du sommet à remplacer
+	 * @param newName	Nouveau nom
+	 */
+	public void renameVertex(String name, String newName) {
+		if (!this.vertices.contains(this.getVertex(newName))) {
+			this.getVertex(name).setLabel(newName);
+		}
+	}
+	
+	public void modifyRelation(String vertexSource, String vertexDestination, String newRelation) {
+		this.getVertex(vertexSource).getLinkVertex(vertexDestination).setRelation(newRelation);
+	}
+
+	/**
+	 * Ajout de propriétés pour un lien
+	 * 
+	 * @param source      Noeud source
+	 * @param destination Noeud de destination
+	 * @param properties  Tableau de propriétés à ajouter
+	 */
+	public void addProperties(String source, String destination, Set<String> properties) {
+		Link link = this.getVertex(source).getLinkVertex(destination);
+		link.addProperties(properties);
 	}
 
 	/**
@@ -62,7 +90,33 @@ public class Graph {
 	public void addSingleEdge(Vertex source, Vertex destination, String direction, List<LinkProperties> properties,
 			String relation) {
 		source.setParentChildren(destination);
-		destination.setLink(new Link(source, direction, properties, relation, destination));
+		source.setLink(new Link(source, direction, properties, relation, destination));
+	}
+
+	/**
+	 * Méthode pour supprimer un sommet
+	 * Doit d'abord supprimer les liens qui pointe sur lui
+	 * Doit ensuite supprimer ses liens
+	 * Doit enfin supprimer le sommet de la liste des sommets du graphe 
+	 * @param vertex  Sommet qui doit etre supprimé
+	 */
+	public void removeVertex(String vertex) {
+		for (Vertex parent : this.getVertex(vertex).getParents()) {
+			parent.getLink().remove(parent.getLinkVertex(vertex));
+		}
+		this.getVertex(vertex).getLink().clear();
+		this.getVertices().remove(this.getVertex(vertex));
+	}
+
+	/**
+	 * Méthode de suppression de lien entre 2 sommets
+	 * @param vertexSource 			Sommet source
+	 * @param vertexDestination		Sommet de destination
+	 */
+	public void removeLink(String vertexSource, String vertexDestination) {
+		this.getVertex(vertexSource).getLink()
+			.remove(this.getVertex(vertexSource)
+					.getLinkVertex(vertexDestination));
 	}
 
 	/**
@@ -78,8 +132,8 @@ public class Graph {
 			String relation) {
 		v1.setParentChildren(v2);
 		v2.setParentChildren(v1);
-		v1.setLink(new Link(v2, direction, properties, relation, v1));
-		v2.setLink(new Link(v1, direction, properties, relation, v2));
+		v1.setLink(new Link(v1, direction, properties, relation, v2));
+		v2.setLink(new Link(v2, direction, properties, relation, v1));
 	}
 
 	/**
@@ -90,9 +144,9 @@ public class Graph {
 	 * Le deuxième pour les relations sans indication de sens
 	 * 
 	 * 
-	 * @param linkParameters 
-	 * @param relation			relation entre les deux individus (friend par exemple)
-	 * @param index				index du tableau
+	 * @param linkParameters
+	 * @param relation       relation entre les deux individus (friend par exemple)
+	 * @param index          index du tableau
 	 * @return
 	 */
 	public String[] matcher(String[] linkParameters, String[] relation, int index) {
@@ -178,9 +232,9 @@ public class Graph {
 	 * Méthode de recherche permettant de rechercher des elements à partir de
 	 * critères définis : - niveau - liens - mode de parcours
 	 * 
-	 * @param start    Noeud de départ de la recherche
-	 * @param search   La recherche sous forme d'une chaine de caractère
-	 * @param filters  Tableau de filtres
+	 * @param start   Noeud de départ de la recherche
+	 * @param search  La recherche sous forme d'une chaine de caractère
+	 * @param filters Tableau de filtres
 	 * @return
 	 */
 	public Set<String> search(String start, String search, Set<String> filters) {
@@ -215,20 +269,23 @@ public class Graph {
 	 * Permet de récupérer les noeuds parents du noeud courant tout en satisfaisant
 	 * les contraintes de filtres, parametres
 	 * 
-	 * @param setVertices      Tableau qui contient les sommets visités
-	 * @param startingVertex   Noeud de départ à partir duquel on récupère les liens
-	 * @param linkParameter    Paramètres de liens
+	 * @param setVertices    Tableau qui contient les sommets visités
+	 * @param startingVertex Noeud de départ à partir duquel on récupère les liens
+	 * @param linkParameter  Paramètres de liens
 	 * @return
 	 */
 	public Set<Vertex> getAdjacentVertexParent(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
 			Set<String> filters) {
-		for (Link link : startingVertex.getLink()) {
-			if (link.getRelation().equals(linkParameter)) {
-				if (filters == null) {
-					setVertices.add(link.getSource());
-				} else {
-					if (Filter.checkFilters(link, filters)) {
+
+		for (Vertex vertex : startingVertex.getParents()) {
+			for (Link link : vertex.getLink()) {
+				if (link.getRelation().equals(linkParameter)) {
+					if (filters == null) {
 						setVertices.add(link.getSource());
+					} else {
+						if (Filter.checkFilters(link, filters)) {
+							setVertices.add(link.getSource());
+						}
 					}
 				}
 			}
@@ -240,30 +297,28 @@ public class Graph {
 	 * 
 	 * Permet de récupérer les noeuds fils
 	 * 
-	 * @param setVertices      Tableau qui contient les sommets visités
-	 * @param startingVertex   Noeud de départ à partir duquel on récupère les liens
-	 * @param linkParameter    Paramètres de liens
+	 * @param setVertices    Tableau qui contient les sommets visités
+	 * @param startingVertex Noeud de départ à partir duquel on récupère les liens
+	 * @param linkParameter  Paramètres de liens
 	 * @return
 	 */
 	public Set<Vertex> getAdjacentVertexChildren(Set<Vertex> setVertices, Vertex startingVertex, String linkParameter,
 			String direction, Set<String> filters) {
 
-		for (Vertex vertex : startingVertex.getChildren()) {
-			for (Link link : vertex.getLink()) {
-				if (checkConditionAdjacentVertexChildren(link, direction, startingVertex, linkParameter)) {
-					if (filters == null) {
-						setVertices.add(vertex);
-					} else {
-						if (Filter.checkFilters(link, filters)) {
-							setVertices.add(vertex);
-						}
+		for (Link link : startingVertex.getLink()) {
+			if (checkConditionAdjacentVertexChildren(link, direction, startingVertex, linkParameter)) {
+				if (filters == null) {
+					setVertices.add(link.getDestination());
+				} else {
+					if (Filter.checkFilters(link, filters)) {
+						setVertices.add(link.getDestination());
 					}
 				}
 			}
 		}
 		return setVertices;
 	}
-	
+
 	/**
 	 * Vérifie si la condition des enfants permet de les ajouter à l'ensemble de
 	 * sommets
