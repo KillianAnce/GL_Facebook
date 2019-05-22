@@ -44,7 +44,14 @@ public class Vertex {
 		return link;
 	}
 
-	public Link getLinkVertex(String destination) throws NullPointerException{
+	/**
+	 * Permet de récupérer le lien entre 2 sommets en passant la destination
+	 * s'il existe un lien entre les 2 sommets
+	 * @param destination sommet de destination du lien
+	 * @return Retourne le lien entre les 2 sommets
+	 * @throws NullPointerException
+	 */
+	public Link getLinkVertex(String destination) {
 		Link linkVertex = null;
 		for (Link link : this.link) {
 			if (link.getDestination().getLabel().equals(destination)) {
@@ -52,7 +59,6 @@ public class Vertex {
 				break;	
 			}				
 		}
-		
 		return linkVertex;
 	}
 	

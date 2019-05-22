@@ -56,7 +56,11 @@ public class Link {
 				for (String elementShared : shared) {
 					elementsShared.add(elementShared);
 				}
-				this.setLinkProperties(new Shared(elementsShared));				
+				this.setLinkProperties(new Shared(elementsShared));
+				break;
+			default:
+				//nothing
+				break;
 			}
 		}
 	}

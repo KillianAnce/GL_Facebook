@@ -2,30 +2,30 @@ package miage.graph.model;
 
 public class Role extends LinkProperties {
 
-    private String role;
+    private String roleProperty;
 
     public Role(String role){
         super("Role");
-        this.role = role;
+        this.roleProperty = role;
     }
 
     /**
      * @return String Retourne le role
      */
     public String getRole() {
-        return role;
+        return roleProperty;
     }
 
     /**
      * @param role Ajouter/Modifier le role de la propriété
      */
     public void setRole(String role) {
-        this.role = role;
+        this.roleProperty = role;
     }
 
     @Override
     public String toString(){
-        return "role=" + role;
+        return "role=" + roleProperty;
     }
 
 }

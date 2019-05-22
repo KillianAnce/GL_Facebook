@@ -22,15 +22,14 @@ public class GraphUI {
 		graph.getVertices().forEach(vertex -> mxGraph.insertVertex(null, vertex.getLabel(), vertex.getLabel(),
 				randomNumber(graph.getVertices().size()), randomNumber(graph.getVertices().size()), 35, 35));
 
-		graph.getVertices().stream().forEach(vertex -> {
+		graph.getVertices().stream().forEach(vertex -> 
 			vertex.getLink().forEach(relation -> {
-				System.out.println(relation);
 				Object vertex1 = ((mxGraphModel) mxGraph.getModel()).getCell(relation.getSource().getLabel());
 				Object vertex2 = ((mxGraphModel) mxGraph.getModel()).getCell(relation.getDestination().getLabel());
 				mxGraph.insertEdge(null, relation.getSource().getLabel(), relation.getSource().getLabel(), vertex1,
 						vertex2);
-			});
-		});
+			})
+		);
 		swingNode.setContent(mxGraphComponent);
 		
 	}

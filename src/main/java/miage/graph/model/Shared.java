@@ -4,11 +4,11 @@ import java.util.Set;
 
 public class Shared extends LinkProperties {
     
-    private Set<String> shared;
+    private Set<String> sharedProperty;
     
     public Shared(){
         super("Shared");
-        this.shared = new HashSet<>();
+        this.sharedProperty = new HashSet<>();
     }
     
     /**
@@ -18,19 +18,19 @@ public class Shared extends LinkProperties {
      */
     public Shared(Set<String> shared){
         super("Shared");
-        this.shared = shared;
+        this.sharedProperty = shared;
     }
 
     public Set<String> getShared() {
-        return shared;
+        return sharedProperty;
     }
 
     public void setShared(String shared) {
-        this.shared.add(shared);
+        this.sharedProperty.add(shared);
     }
 
     @Override
     public String toString(){
-        return "shared=" + shared.toString().replace(",", "+").trim();
+        return "shared=" + sharedProperty.toString().replace(",", "+").trim();
     }
 }

@@ -280,9 +280,8 @@ public class Graph {
 		for (Vertex vertex : startingVertex.getParents()) {
 			for (Link link : vertex.getLink()) {
 				if (link.getRelation().equals(linkParameter)) {
-					if (filters == null) {
-						setVertices.add(link.getSource());
-					} else if (Filter.checkFilters(link, filters)) {
+					if (filters == null || 
+							Filter.checkFilters(link, filters)) {
 						setVertices.add(link.getSource());
 					}
 				}
