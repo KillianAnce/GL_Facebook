@@ -41,13 +41,24 @@ public class Graph {
 	 * @param label nom du sommet désiré
 	 * @return
 	 */
-	public Vertex getVertex(String label) {
+	public Vertex getVertex(String label) throws NullPointerException{
 		for (Vertex vertex : vertices) {
 			if (vertex.getLabel().equals(label)) {
 				return vertex;
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @param source		Noeud source
+	 * @param destination 	Noeud de destination
+	 * @param properties	Tableau de propriétés à ajouter
+	 */
+	public void addProperties(String source, String destination, Set<String> properties) {
+		Link link = this.getVertex(source).getLinkVertex(destination);
+		link.addProperties(properties);	
 	}
 
 	/**
@@ -63,7 +74,6 @@ public class Graph {
 			String relation) {
 		source.setParentChildren(destination);
 		source.setLink(new Link(source, direction, properties, relation, destination));
-//		destination.setLink(new Link(source, direction, properties, relation, destination));
 	}
 
 	/**

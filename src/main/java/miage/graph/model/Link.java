@@ -1,6 +1,8 @@
 package miage.graph.model;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Link {
 
@@ -28,6 +30,35 @@ public class Link {
 
 	public List<LinkProperties> getLinkProperties() {
 		return linkProperties;
+	}
+	
+	/**
+	 * Méthode d'ajout de propriétés à un lien entre un noeud source
+	 * et un noeud de destination
+	 * @param properties	Tableau des propriétés
+	 */
+	public void addProperties(Set<String> properties) {
+		for (String property : properties) {
+			String[] splitProperty = property.split("=");
+			switch (splitProperty[0]) {
+			case "since":
+				this.setLinkProperties(new Since(splitProperty[1]));
+				break;
+			case "hired":
+				this.setLinkProperties(new Hired(splitProperty[1]));
+				break;
+			case "role":
+				this.setLinkProperties(new Role(splitProperty[1]));
+				break;
+			case "shared":
+				String[] shared = splitProperty[1].split(",");
+				Set<String> elementsShared = new HashSet<>();
+				for (String elementShared : shared) {
+					elementsShared.add(elementShared);
+				}
+				this.setLinkProperties(new Shared(elementsShared));				
+			}
+		}
 	}
 
 	/**
@@ -96,7 +127,7 @@ public class Link {
 	public void setDestination(Vertex destination) {
 		this.destination = destination;
 	}
-
+	
 	@Override
 	public String toString() {
 		String toString = "";

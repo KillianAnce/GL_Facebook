@@ -44,7 +44,7 @@ public class Vertex {
 		return link;
 	}
 
-	public Link getLinkVertex(String destination) {
+	public Link getLinkVertex(String destination) throws NullPointerException{
 		Link linkVertex = null;
 		for (Link link : this.link) {
 			if (link.getDestination().getLabel().equals(destination)) {
