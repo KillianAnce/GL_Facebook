@@ -224,6 +224,12 @@ public class GraphTest {
 		graph.renameVertex("NoSQLDistilled", "Toto");
 		assertEquals(null, graph.getVertex("NoSQLDistilled"));
 		assertEquals(graph.getVertices().contains(graph.getVertex("Toto")), true);
-		
+	}
+	
+	@Test
+	public void renameRelation() {
+		graph.modifyRelation("Barbara", "Anna", "coloc");
+		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation(), "coloc");
+		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation().equals("friend"),false);
 	}
 }

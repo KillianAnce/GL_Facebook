@@ -61,8 +61,13 @@ public class Graph {
 			this.getVertex(name).setLabel(newName);
 		}
 	}
+	
+	public void modifyRelation(String vertexSource, String vertexDestination, String newRelation) {
+		this.getVertex(vertexSource).getLinkVertex(vertexDestination).setRelation(newRelation);
+	}
 
 	/**
+	 * Ajout de propriétés pour un lien
 	 * 
 	 * @param source      Noeud source
 	 * @param destination Noeud de destination
