@@ -1,14 +1,19 @@
 package miage.graph.controller;
 
 import java.io.File;
+import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import miage.graph.App;
 import miage.graph.model.Graph;
 import miage.graph.utils.Reader;
 
@@ -27,20 +32,40 @@ public class FileLoaderController {
 	 * @param event
 	 */
 	@FXML
-	void browseFile(ActionEvent event) {
+	public void browseFile(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choisir un fichier");
 		File file = fileChooser.showOpenDialog(new Stage());
+		
 		if (file == null)
 			return;
 		try {
 			graph = Reader.read(file.getAbsolutePath());
-
+			openGraphController();
+			
 		} catch (Exception e) {
 			String message = String.format("Impossible d'ouvrir le fichier \"%s\".", file.getAbsolutePath());
 			Alert alert = new Alert(Alert.AlertType.ERROR, message);
 			alert.showAndWait();
 		}
+	}
+	
+	public void openGraphController() {
+		Parent root = null;
+        try 
+        {
+//        	System.out.println(getClass().getResource("../view/Graph.fxml"));
+        	root = FXMLLoader.load(getClass().getResource("../view/Graph.fxml"));
+        	Scene scene = new Scene(root);
+            App.getStage().close();
+            App.getStage().setTitle("Indicateurs du cours");
+            App.getStage().setScene(scene);
+            App.getStage().show();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
 	}
 
 	public static Graph getGraph() {

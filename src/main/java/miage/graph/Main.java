@@ -8,10 +8,8 @@ import miage.graph.utils.*;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Reader r = new Reader("src/main/resources/facebook.txt");
-		Graph g = r.read();
-		System.out.println(g);
-		
+		Graph g = Reader.read("src/main/resources/facebook.txt");
+		System.out.println(g);	
 		System.out.println("=========================================");
 		System.out.println(g.getVertex("Jill"));
 		g.export("export");
