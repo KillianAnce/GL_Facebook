@@ -2,12 +2,15 @@ package miage.graph.controller;
 
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
 import miage.graph.model.Graph;
 import miage.graph.model.GraphUI;
 
 public class GraphController {
 	@FXML
 	private SwingNode swingNode;
+	@FXML
+	private AnchorPane anchorPane;
 	private Graph graph;
 	private GraphUI UI;
 
@@ -15,7 +18,7 @@ public class GraphController {
 	public void initialize() {
 		graph = FileLoaderController.getGraph();
 		UI = new GraphUI();
-		UI.createUI(swingNode, graph);
+		UI.createUI(swingNode, graph, anchorPane);
 	}
 
 }

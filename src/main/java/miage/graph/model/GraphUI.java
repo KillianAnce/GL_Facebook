@@ -4,6 +4,8 @@ import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import javafx.embed.swing.SwingNode;
+import javafx.scene.layout.AnchorPane;
+
 import java.util.Random;
 
 public class GraphUI {
@@ -15,10 +17,10 @@ public class GraphUI {
 		mxGraphComponent = new mxGraphComponent(mxGraph);
 	}
 
-	public void createUI(SwingNode swingNode, Graph graph) {
+	public void createUI(SwingNode swingNode, Graph graph, AnchorPane anchorPane) {
 
 		graph.getVertices().forEach(vertex -> mxGraph.insertVertex(null, vertex.getLabel(), vertex.getLabel(),
-				random(graph.getVertices().size()), random(graph.getVertices().size()), 35, 35));
+				randomNumber(graph.getVertices().size()), randomNumber(graph.getVertices().size()), 35, 35));
 
 		graph.getVertices().stream().forEach(vertex -> {
 			vertex.getLink().forEach(relation -> {
@@ -33,13 +35,8 @@ public class GraphUI {
 		
 	}
 
-	/**
-	 * Generate a random integer value
-	 *
-	 * @param bound the upper bound
-	 * @return a random integer
-	 */
-	private int random(int bound) {
-		return 50 * new Random().nextInt(bound);
+
+	private int randomNumber(int bound) {
+		return 60 * new Random().nextInt(bound);
 	}
 }

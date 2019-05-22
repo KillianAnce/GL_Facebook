@@ -54,7 +54,6 @@ public class FileLoaderController {
 		Parent root = null;
         try 
         {
-//        	System.out.println(getClass().getResource("../view/Graph.fxml"));
         	root = FXMLLoader.load(getClass().getResource("../view/Graph.fxml"));
         	Scene scene = new Scene(root);
             App.getStage().close();
