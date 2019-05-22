@@ -212,20 +212,20 @@ public class GraphTest {
 	@Test
 	public void NodeRenamingByExistentName() {
 		graph.renameVertex("NoSQLDistilled", "Dawn");
-		assertEquals(graph.getVertices().contains(graph.getVertex("NoSQLDistilled")), true);
+		assertEquals(true,graph.getVertices().contains(graph.getVertex("NoSQLDistilled")));
 	}
 	
 	@Test
 	public void NodeRenamingByNonExistentName() {
 		graph.renameVertex("NoSQLDistilled", "Toto");
 		assertEquals(null, graph.getVertex("NoSQLDistilled"));
-		assertEquals(graph.getVertices().contains(graph.getVertex("Toto")), true);
+		assertEquals(true, graph.getVertices().contains(graph.getVertex("Toto")));
 	}
 	
 	@Test
 	public void renameRelation() {
 		graph.modifyRelation("Barbara", "Anna", "coloc");
-		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation(), "coloc");
-		assertEquals(graph.getVertex("Barbara").getLinkVertex("Anna").getRelation().equals("friend"),false);
+		assertEquals("coloc", graph.getVertex("Barbara").getLinkVertex("Anna").getRelation());
+		assertEquals(false, graph.getVertex("Barbara").getLinkVertex("Anna").getRelation().equals("friend"));
 	}
 }
