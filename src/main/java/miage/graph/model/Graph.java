@@ -10,11 +10,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import miage.graph.utils.Reader;
+
 public class Graph {
 
+	private final static Logger LOGGER = Logger.getLogger(Reader.class.getName());
 	private Set<Vertex> vertices;
 
 	public Graph() {
@@ -127,9 +131,8 @@ public class Graph {
 		try {
 			this.getVertex(vertexSource).getLink()
 					.remove(this.getVertex(vertexSource).getLinkVertex(vertexDestination));
-
 		} catch (Exception e) {
-			success = false;
+
 		}
 		return success;
 	}
@@ -294,10 +297,9 @@ public class Graph {
 
 		for (Vertex vertex : startingVertex.getParents()) {
 			for (Link link : vertex.getLink()) {
-				if (link.getRelation().equals(linkParameter)) {
-					if (filters == null || Filter.checkFilters(link, filters)) {
-						setVertices.add(link.getSource());
-					}
+				if (link.getRelation().equals(linkParameter)
+						&& (filters == null || Filter.checkFilters(link, filters))) {
+					setVertices.add(link.getSource());
 				}
 			}
 		}
@@ -396,7 +398,7 @@ public class Graph {
 
 			export.println(this.toString());
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.severe("Erreur lors de l'export du fichier");
 		}
 	}
 

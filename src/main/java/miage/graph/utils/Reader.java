@@ -1,11 +1,11 @@
 package miage.graph.utils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import miage.graph.model.Graph;
@@ -18,6 +18,7 @@ import miage.graph.model.Vertex;
 
 public class Reader {
 	
+	private final static Logger LOGGER = Logger.getLogger(Reader.class.getName());
 
 	private Reader() {
 	}
@@ -125,7 +126,7 @@ public class Reader {
 				} 
 			}
 		} catch (FileNotFoundException fnfe) {
-			fnfe.printStackTrace();
+			LOGGER.severe(fnfe.getMessage());
 		}
 		return graph;
 	}

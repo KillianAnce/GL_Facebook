@@ -4,8 +4,6 @@ import com.mxgraph.model.mxGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import javafx.embed.swing.SwingNode;
-import javafx.scene.layout.AnchorPane;
-
 import java.util.List;
 import java.util.Random;
 

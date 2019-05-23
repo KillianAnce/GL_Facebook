@@ -3,9 +3,14 @@ package miage.graph.model;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import miage.graph.utils.Reader;
 
 public class Link {
 
+	private final static Logger LOGGER = Logger.getLogger(Reader.class.getName());
+	
 	private Vertex source;
 	private String direction;
 	private List<LinkProperties> linkProperties;
@@ -86,7 +91,7 @@ public class Link {
 						isPresent = true;
 					}
 				} catch (NullPointerException e) {
-					e.printStackTrace();
+					LOGGER.severe(e.getMessage());
 				}
 			}
 		}

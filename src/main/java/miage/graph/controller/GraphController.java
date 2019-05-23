@@ -76,7 +76,7 @@ public class GraphController {
 		
 		graph = FileLoaderController.getGraph();
 		userInterface = new GraphUI();
-		userInterface.createUI(swingNode, graph, anchorPane);
+		userInterface.createUI(swingNode, graph);
 	}
 
 	@FXML

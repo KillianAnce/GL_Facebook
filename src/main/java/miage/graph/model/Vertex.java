@@ -53,9 +53,9 @@ public class Vertex {
 	 */
 	public Link getLinkVertex(String destination) {
 		Link linkVertex = null;
-		for (Link link : this.link) {
-			if (link.getDestination().getLabel().equals(destination)) {
-				linkVertex = link;
+		for (Link linkInstance : this.link) {
+			if (linkInstance.getDestination().getLabel().equals(destination)) {
+				linkVertex = linkInstance;
 				break;	
 			}				
 		}
