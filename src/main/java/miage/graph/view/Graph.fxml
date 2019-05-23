@@ -30,11 +30,12 @@
               <panes>
                 <TitledPane animated="false" text="Ajouter un noeud">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="174.0" prefWidth="200.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="204.0" prefWidth="200.0">
                            <children>
-                              <TextField layoutX="26.0" layoutY="37.0" />
-                              <Button layoutX="63.0" layoutY="80.0" mnemonicParsing="false" text="Ajouter" />
+                             
+                              <Button fx:id="addVertex" layoutX="63.0" layoutY="80.0" mnemonicParsing="false" onAction="#createVertex" text="Ajouter" />
                               <Label layoutX="26.0" layoutY="14.0" text="Nom du noeud à ajouter" />
+                        <TextField fx:id="vertexName" layoutX="26.0" layoutY="44.0" />
                            </children>
                         </AnchorPane>
                   </content>
@@ -49,8 +50,8 @@
                               <ChoiceBox layoutX="26.0" layoutY="211.0" prefWidth="150.0" />
                               <ChoiceBox layoutX="25.0" layoutY="281.0" prefWidth="150.0" />
                               <ComboBox layoutX="25.0" layoutY="149.0" prefWidth="150.0" />
-                              <Label layoutX="26.0" layoutY="6.0" text="First Vertex" />
-                              <Label layoutX="25.0" layoutY="65.0" text="Second vertex" />
+                              <Label layoutX="26.0" layoutY="6.0" text="Noeud de départ : " />
+                              <Label layoutX="25.0" layoutY="65.0" text="Noeud d'arrivé" />
                               <Label layoutX="26.0" layoutY="123.0" text="Direction" />
                               <Label layoutX="25.0" layoutY="186.0" text="Relation" />
                               <Label layoutX="25.0" layoutY="252.0" text="Filters" />
@@ -102,16 +103,6 @@
             <items>
               <MenuItem mnemonicParsing="false" text="Importer un fichier" />
                <MenuItem mnemonicParsing="false" text="Exporter un fichier" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>
