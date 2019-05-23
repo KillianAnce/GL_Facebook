@@ -18,7 +18,7 @@ import miage.graph.model.Vertex;
 
 public class Reader {
 	
-	private final static Logger LOGGER = Logger.getLogger(Reader.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Reader.class.getName());
 
 	private Reader() {
 	}

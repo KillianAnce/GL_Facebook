@@ -2,6 +2,7 @@ package miage.graph.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import miage.graph.utils.Reader;
 
 public class FileLoaderController {
 
+	private static final Logger LOGGER = Logger.getLogger(App.class.getName());
 	private static Graph graph;
 	@FXML
 	private Button explorer;
@@ -63,7 +65,7 @@ public class FileLoaderController {
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+        	LOGGER.severe("Impossible d'ouvrir la vue Graph.fxml");
         }
 	}
 

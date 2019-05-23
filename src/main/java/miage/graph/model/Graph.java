@@ -18,9 +18,8 @@ import miage.graph.utils.Reader;
 
 public class Graph {
 
-	private final static Logger LOGGER = Logger.getLogger(Reader.class.getName());
 	private Set<Vertex> vertices;
-
+	private static final Logger LOGGER = Logger.getLogger(Graph.class.getName());
 	public Graph() {
 		this.vertices = new HashSet<>();
 	}
@@ -132,7 +131,7 @@ public class Graph {
 			this.getVertex(vertexSource).getLink()
 					.remove(this.getVertex(vertexSource).getLinkVertex(vertexDestination));
 		} catch (Exception e) {
-
+			//nothing
 		}
 		return success;
 	}

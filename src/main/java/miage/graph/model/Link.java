@@ -9,7 +9,7 @@ import miage.graph.utils.Reader;
 
 public class Link {
 
-	private final static Logger LOGGER = Logger.getLogger(Reader.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Link.class.getName());
 	
 	private Vertex source;
 	private String direction;

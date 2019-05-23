@@ -53,7 +53,7 @@
                               <Label layoutX="25.0" layoutY="186.0" text="Relation" />
                         <Group layoutX="25.0" layoutY="252.0">
                            <children>
-                                    <Label layoutX="60.0" layoutY="14.0" text="Filters" />
+                                    <Label layoutX="60.0" layoutY="14.0" text="Filtres" />
                               <ComboBox fx:id="filterName" layoutX="1.0" layoutY="71.0" prefWidth="150.0" />
                               <TextField fx:id="filterValue" layoutX="2.0" layoutY="147.0" />
                               <Button fx:id="addFilter" layoutX="1.0" layoutY="225.0" mnemonicParsing="false" onAction="#addFilter" prefHeight="25.0" prefWidth="149.0" text="addFilter" />
@@ -82,8 +82,8 @@
                               <TextField fx:id="firstVertex" layoutX="26.0" layoutY="43.0" />
                               <TextField fx:id="secondVertex" layoutX="26.0" layoutY="113.0" />
                               <Button layoutX="65.0" layoutY="168.0" mnemonicParsing="false" onAction="#removeLink" text="Supprimer" />
-                              <Label layoutX="26.0" layoutY="14.0" text="First vertex" />
-                              <Label layoutX="26.0" layoutY="86.0" text="Second vertex" />
+                              <Label layoutX="26.0" layoutY="14.0" text="Sommet de départ :" />
+                              <Label layoutX="26.0" layoutY="86.0" text="Sommet d'arrivé" />
                            </children>
                         </AnchorPane>
                     </content>
