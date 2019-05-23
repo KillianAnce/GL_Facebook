@@ -18,7 +18,7 @@ public class GraphUI {
 		mxGraphComponent = new mxGraphComponent(mxGraph);
 	}
 
-	public void createUI(SwingNode swingNode, Graph graph, AnchorPane anchorPane) {
+	public void createUI(SwingNode swingNode, Graph graph) {
 
 		graph.getVertices().forEach(vertex -> mxGraph.insertVertex(null, vertex.getLabel(), vertex.getLabel(),
 				randomNumber(graph.getVertices().size()), randomNumber(graph.getVertices().size()), 35, 35));
@@ -35,14 +35,13 @@ public class GraphUI {
 		
 	}
 	
-	
-	public void addVertex(Graph graph,String Name, SwingNode swingNode) {
-		Vertex sommet = graph.addVertex(new Vertex(Name));
+	public void addVertex(Graph graph,String name, SwingNode swingNode) {
+		Vertex sommet = graph.addVertex(new Vertex(name));
 		if (sommet == null) {
-			mxGraph.insertVertex(null, graph.getVertex(Name).getLabel(), graph.getVertex(Name).getLabel(),
+			mxGraph.insertVertex(null, graph.getVertex(name).getLabel(), graph.getVertex(name).getLabel(),
 					randomNumber(graph.getVertices().size()), randomNumber(graph.getVertices().size()), 35, 35)	;
 
-			graph.getVertex(Name).getLink().forEach(vertex -> {
+			graph.getVertex(name).getLink().forEach(vertex -> {
 					Object vertex1 = ((mxGraphModel) mxGraph.getModel()).getCell(vertex.getSource().getLabel());
 					Object vertex2 = ((mxGraphModel) mxGraph.getModel()).getCell(vertex.getDestination().getLabel());
 					mxGraph.insertEdge(null, vertex.getSource().getLabel(), vertex.getRelation(), vertex1,
@@ -61,6 +60,7 @@ public class GraphUI {
 					graph.getVertex(startingNode), 
 					graph.getVertex(destNode), 
 					direction, linkProperties, relation);
+			
 			Object vertex1 = ((mxGraphModel) mxGraph.getModel()).getCell(startingNode);
 			Object vertex2 = ((mxGraphModel) mxGraph.getModel()).getCell(destNode);
 			mxGraph.insertEdge(null, startingNode, relation, vertex1,
@@ -71,6 +71,7 @@ public class GraphUI {
 						graph.getVertex(startingNode), 
 						graph.getVertex(destNode), 
 						direction, linkProperties, relation);
+				
 				Object vertex1 = ((mxGraphModel) mxGraph.getModel()).getCell(startingNode);
 				Object vertex2 = ((mxGraphModel) mxGraph.getModel()).getCell(destNode);
 				mxGraph.insertEdge(null, startingNode, relation, vertex1,
@@ -83,20 +84,20 @@ public class GraphUI {
 	}
 	
 	public void removeVertex(Graph graph,SwingNode swingNode) {
-		if (mxGraph.getSelectionCell() != null) {
-			if (graph.removeVertex(mxGraph.getModel().getValue(mxGraph.getSelectionCell()).toString())) {
+		Object graphCell = mxGraph.getSelectionCell();
+		
+		if (graphCell != null &&
+				graph.removeVertex(mxGraph.getModel().getValue(graphCell).toString())) {
 				mxGraph.getModel().remove(mxGraph.getSelectionCell());
 				swingNode.setContent(mxGraphComponent);
-			}
 		}
 	}
 	
 	public void removeLink(Graph graph, String firstVertex, String secondVertex, SwingNode swingNode) {
-		if (mxGraph.getSelectionCell() != null) {
-			if (graph.removeLink(firstVertex, secondVertex)) {
+		if (mxGraph.getSelectionCell() != null && 
+				graph.removeLink(firstVertex, secondVertex)) {
 				mxGraph.getModel().remove(mxGraph.getSelectionCell());
 				swingNode.setContent(mxGraphComponent);
-			}
 		}
 	}
 
