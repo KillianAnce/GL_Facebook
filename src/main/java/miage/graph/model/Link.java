@@ -135,7 +135,7 @@ public class Link {
 	@Override
 	public String toString() {
 		String toString = "";
-		if (linkProperties == null) {
+		if (linkProperties == null || linkProperties.isEmpty() || linkProperties.get(0) == null) {
 			toString = source.getLabel() + ":" + relation + ":" + "--" + direction + ":" + destination.getLabel()
 					+ "\n";
 		} else {

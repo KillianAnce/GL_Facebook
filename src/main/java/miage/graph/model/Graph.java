@@ -101,12 +101,19 @@ public class Graph {
 	 * 
 	 * @param vertex Sommet qui doit etre supprimé
 	 */
-	public void removeVertex(String vertex) {
-		for (Vertex parent : this.getVertex(vertex).getParents()) {
-			parent.getLink().remove(parent.getLinkVertex(vertex));
+	public boolean removeVertex(String vertex) {
+		boolean success = false;
+		try {
+			for (Vertex parent : this.getVertex(vertex).getParents()) {
+				parent.getLink().remove(parent.getLinkVertex(vertex));
+			}
+			this.getVertex(vertex).getLink().clear();
+			this.getVertices().remove(this.getVertex(vertex));
+			success = true;
+		} catch (Exception e) {
+			success = false;
 		}
-		this.getVertex(vertex).getLink().clear();
-		this.getVertices().remove(this.getVertex(vertex));
+		return success;
 	}
 
 	/**
@@ -115,8 +122,16 @@ public class Graph {
 	 * @param vertexSource      Sommet source
 	 * @param vertexDestination Sommet de destination
 	 */
-	public void removeLink(String vertexSource, String vertexDestination) {
-		this.getVertex(vertexSource).getLink().remove(this.getVertex(vertexSource).getLinkVertex(vertexDestination));
+	public boolean removeLink(String vertexSource, String vertexDestination) {
+		boolean success = false;
+		try {
+			this.getVertex(vertexSource).getLink()
+					.remove(this.getVertex(vertexSource).getLinkVertex(vertexDestination));
+
+		} catch (Exception e) {
+			success = false;
+		}
+		return success;
 	}
 
 	/**
@@ -280,8 +295,7 @@ public class Graph {
 		for (Vertex vertex : startingVertex.getParents()) {
 			for (Link link : vertex.getLink()) {
 				if (link.getRelation().equals(linkParameter)) {
-					if (filters == null || 
-							Filter.checkFilters(link, filters)) {
+					if (filters == null || Filter.checkFilters(link, filters)) {
 						setVertices.add(link.getSource());
 					}
 				}
