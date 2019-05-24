@@ -216,7 +216,6 @@ class GraphSearch {
 	
 	@Test
 	void SearchDepthTraversalWithMultipleFilter() throws IOException {
-		
 		String[] strArray = {"Elisabeth", "Jill"};
 		Set<String> strSet = Arrays.stream(strArray).collect(Collectors.toSet());
 		

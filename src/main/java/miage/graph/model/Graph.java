@@ -130,6 +130,7 @@ public class Graph {
 		try {
 			this.getVertex(vertexSource).getLink()
 					.remove(this.getVertex(vertexSource).getLinkVertex(vertexDestination));
+			success = true;
 		} catch (Exception e) {
 			//nothing
 		}
@@ -167,7 +168,7 @@ public class Graph {
 	 * @return
 	 */
 	public String[] matcher(String[] linkParameters, String[] relation, int index) {
-		if (Pattern.compile("([A-Za-z]+ (<|>))").matcher(relation[index]).find()) {
+		if (Pattern.compile("([A-Za-z]+ (<>|<|>))").matcher(relation[index]).find()) {
 			linkParameters = relation[index].split(" ");
 		}
 		if (Pattern.compile("^([A-Za-z]+)$").matcher(relation[index]).find()) {
@@ -259,7 +260,7 @@ public class Graph {
 		String traversal = "";
 		Matcher level = Pattern.compile("(niveau=[0-9]+)").matcher(search);
 		int levelTraversal = this.getVertices().size();
-		Matcher link = Pattern.compile("(liens=\\([a-z]+( (<|<>|>))?((\\,?[a-z]+( (<|<>|>))?)+)?\\))").matcher(search);
+		Matcher link = Pattern.compile("(liens=\\([a-z]+( (<>|<|>))?((\\,?[a-z]+( (<>|<|>))?)+)?\\))").matcher(search);
 		String[] linkParameters = null;
 		Set<String> sommetsVisites = new HashSet<>();
 
@@ -297,7 +298,7 @@ public class Graph {
 		for (Vertex vertex : startingVertex.getParents()) {
 			for (Link link : vertex.getLink()) {
 				if (link.getRelation().equals(linkParameter)
-						&& (filters == null || Filter.checkFilters(link, filters))) {
+						&& (filters == null || filters.isEmpty() || Filter.checkFilters(link, filters))) {
 					setVertices.add(link.getSource());
 				}
 			}
@@ -319,7 +320,7 @@ public class Graph {
 
 		for (Link link : startingVertex.getLink()) {
 			if (checkConditionAdjacentVertexChildren(link, direction, startingVertex, linkParameter)) {
-				if (filters == null) {
+				if (filters == null || filters.isEmpty()) {
 					setVertices.add(link.getDestination());
 				} else {
 					if (Filter.checkFilters(link, filters)) {
@@ -378,7 +379,7 @@ public class Graph {
 			getAdjacentVertexParent(setVertices, startingVertex, linkParameter, filters);
 			break;
 		default:
-			getAdjacentVertexChildren(setVertices, startingVertex, linkParameter, "", filters);
+			getAdjacentVertexChildren(setVertices, startingVertex, linkParameter, ">", filters);
 			getAdjacentVertexParent(setVertices, startingVertex, linkParameter, filters);
 			break;
 
