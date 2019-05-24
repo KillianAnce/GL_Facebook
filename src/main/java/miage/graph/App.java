@@ -18,7 +18,7 @@ public class App extends Application {
 		Parent root = null;
         try 
         {
-        	root = FXMLLoader.load(getClass().getResource("./view/Graph.fxml"));
+        	root = FXMLLoader.load(getClass().getResource("view/Graph.fxml"));
         }
         catch(IOException e)
         {
