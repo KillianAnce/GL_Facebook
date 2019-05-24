@@ -8,11 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import miage.graph.model.Graph;
 
 public class App extends Application {
 
-	private static Stage stage;
 	private static final Logger LOGGER = Logger.getLogger(App.class.getName());
 	
 	@Override
@@ -20,27 +18,20 @@ public class App extends Application {
 		Parent root = null;
         try 
         {
-        	root = FXMLLoader.load(getClass().getResource("./view/FileLoader.fxml"));
+        	root = FXMLLoader.load(getClass().getResource("./view/Graph.fxml"));
         }
         catch(IOException e)
         {
-        	LOGGER.severe("Impossible d'ouvir l'interface FileLoader");
+        	LOGGER.severe("Impossible d'ouvir l'interface du graphique");
         }
-        stage = primaryStage;        
         Scene scene = new Scene(root);
-        stage.setTitle("GL_Facebook");
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
+        primaryStage.setTitle("GL_Facebook");
+        primaryStage.setResizable(false);
+        primaryStage.setScene(scene);
+        primaryStage.show();
 	}
 
 	public static void main(String[] args) {
 		launch(args);
-	}
-
-	public static Stage getStage() {
-		return stage;
-	}
-	
-	
+	}	
 }

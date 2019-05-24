@@ -45,7 +45,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="addLink" layoutX="77.0" layoutY="594.0" mnemonicParsing="false" onAction="#addLink" text="Ajouter" />
+                              <Button fx:id="addLink" layoutX="77.0" layoutY="520.0" mnemonicParsing="false" onAction="#addLink" text="Ajouter" />
                               <TextField fx:id="startingNode" layoutX="26.0" layoutY="23.0" />
                               <TextField fx:id="destNode" layoutX="26.0" layoutY="72.0" />
                               <ChoiceBox fx:id="relation" layoutX="26.0" layoutY="176.0" prefWidth="150.0" />
@@ -138,8 +138,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="Fichier">
             <items>
-              <MenuItem mnemonicParsing="false" text="Importer un fichier" />
-               <MenuItem mnemonicParsing="false" text="Exporter un fichier" />
+              <MenuItem fx:id="tbrowseFile" mnemonicParsing="false" onAction="#browseFile" text="Importer un fichier" />
+               <MenuItem fx:id="menuExport" mnemonicParsing="false" onAction="#export" text="Exporter un fichier" />
             </items>
           </Menu>
         </menus>

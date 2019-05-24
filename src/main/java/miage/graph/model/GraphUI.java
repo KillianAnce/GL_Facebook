@@ -15,6 +15,10 @@ public class GraphUI {
 	public GraphUI() {
 		mxGraphComponent = new mxGraphComponent(mxGraph);
 	}
+	
+	public void createUIEmpty(SwingNode swingNode) {
+		swingNode.setContent(mxGraphComponent);
+	}
 
 	public void createUI(SwingNode swingNode, Graph graph) {
 

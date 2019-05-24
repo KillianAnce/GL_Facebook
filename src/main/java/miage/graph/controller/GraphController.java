@@ -1,5 +1,6 @@
 package miage.graph.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Set;
 import javafx.embed.swing.SwingNode;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -15,7 +17,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import miage.graph.model.*;
+import miage.graph.utils.Reader;
+import javafx.scene.control.MenuItem;
 
 public class GraphController {
 	@FXML
@@ -24,6 +30,11 @@ public class GraphController {
 	private AnchorPane anchorPane;
 	@FXML
 	private Button addVertex;
+	
+	@FXML
+    private MenuItem tbrowseFile;
+	@FXML
+    private MenuItem menuExport;
 
 	// Partie ajout lien
 	@FXML
@@ -55,6 +66,9 @@ public class GraphController {
 	@FXML
 	private TextField secondVertex;
 
+	@FXML
+	private Button addLinkSearch;	
+	
 	// search
 	@FXML
 	private ChoiceBox searchNode;
@@ -85,6 +99,12 @@ public class GraphController {
 	private Graph graph;
 	private GraphUI userInterface;
 
+	private static final String HIRED = "hired";
+	private static final String SINCE = "since";
+	private static final String SHARED = "Shared";
+	private static final String ROLE = "role";
+	
+	
 	@FXML
 	public void initialize() {
 		direction.getItems().add(">");
@@ -108,37 +128,27 @@ public class GraphController {
 		relationSearch.getItems().add("category");
 		relationSearch.getSelectionModel().selectFirst();
 
-		filterName.getItems().add("hired");
-		filterName.getItems().add("since");
-		filterName.getItems().add("role");
-		filterName.getItems().add("Shared");
+		filterName.getItems().add(HIRED);
+		filterName.getItems().add(SINCE);
+		filterName.getItems().add(ROLE);
+		filterName.getItems().add(SHARED);
 
-		filterNameSearch.getItems().add("hired");
-		filterNameSearch.getItems().add("since");
-		filterNameSearch.getItems().add("role");
-		filterNameSearch.getItems().add("shared");
+		filterNameSearch.getItems().add(HIRED);
+		filterNameSearch.getItems().add(SINCE);
+		filterNameSearch.getItems().add(ROLE);
+		filterNameSearch.getItems().add(SHARED);
 
 		parcoursSearch.getItems().add("largeur");
 		parcoursSearch.getItems().add("profondeur");
 		parcoursSearch.getSelectionModel().selectFirst();
 
-		graph = FileLoaderController.getGraph();
-
 		circleFilterLink.setFill(javafx.scene.paint.Color.RED);
 		circleFilterSearch.setFill(javafx.scene.paint.Color.RED);
 		circleLinkSearch.setFill(javafx.scene.paint.Color.RED);
 
-		for (Vertex vertex : graph.getVertices()) {
-			searchNode.getItems().add(vertex.getLabel());
-		}
-
-		for (int i = 0; i < graph.getVertices().size(); i++) {
-			niveauSearch.getItems().add(i);
-		}
-		niveauSearch.getSelectionModel().selectNext();
-
+		graph = new Graph();
 		userInterface = new GraphUI();
-		userInterface.createUI(swingNode, graph);
+		userInterface.createUIEmpty(swingNode);
 	}
 
 	@FXML
@@ -159,12 +169,12 @@ public class GraphController {
 	@FXML
 	void addFilter(ActionEvent event) {
 		try {
-			if (filterName.getSelectionModel().getSelectedItem().toString().equals("hired")) {
+			if (filterName.getSelectionModel().getSelectedItem().toString().equals(HIRED)) {
 				linkProperties.add(new Hired(filterValue.getText()));
 				circleFilterLink.setFill(javafx.scene.paint.Color.GREEN);
-			} else if (filterName.getSelectionModel().getSelectedItem().toString().equals("since")) {
+			} else if (filterName.getSelectionModel().getSelectedItem().toString().equals(SINCE)) {
 				linkProperties.add(new Since(filterValue.getText()));
-			} else if (filterName.getSelectionModel().getSelectedItem().toString().equals("role")) {
+			} else if (filterName.getSelectionModel().getSelectedItem().toString().equals(ROLE)) {
 				linkProperties.add(new Role(filterValue.getText()));
 			} else {
 				String[] value = filterValue.getText().split(",");
@@ -202,7 +212,7 @@ public class GraphController {
 				countNumberClick++;
 			}
 		} catch (Exception e) {
-			
+			//nothing
 		}
 		circleLinkSearch.setFill(javafx.scene.paint.Color.GREEN);
 	}
@@ -210,11 +220,11 @@ public class GraphController {
 	@FXML
 	void addFilterSearch(ActionEvent event) {
 		try {
-			if (filterNameSearch.getSelectionModel().getSelectedItem().toString().equals("hired")) {
+			if (filterNameSearch.getSelectionModel().getSelectedItem().toString().equals(HIRED)) {
 				filtersSearch.add("hired=" + filterValueSearch.getText());
-			} else if (filterNameSearch.getSelectionModel().getSelectedItem().toString().equals("since")) {
+			} else if (filterNameSearch.getSelectionModel().getSelectedItem().toString().equals(SINCE)) {
 				filtersSearch.add("since=" + filterValueSearch.getText());
-			} else if (filterNameSearch.getSelectionModel().getSelectedItem().toString().equals("role")) {
+			} else if (filterNameSearch.getSelectionModel().getSelectedItem().toString().equals(ROLE)) {
 				filtersSearch.add("role=" + filterValueSearch.getText());
 			} else {
 				filtersSearch.add("shared=" + filterValueSearch.getText());
@@ -225,6 +235,55 @@ public class GraphController {
 		}
 	}
 
+	/**
+	 * Permet d'ouvrir le fichier 
+	 * @param event
+	 */
+	@FXML
+	public void browseFile(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choisir un fichier");
+		File file = fileChooser.showOpenDialog(new Stage());
+	
+		if (file == null)
+			return;
+		try {
+			graph = Reader.read(file.getAbsolutePath());
+			instanciateComboboxWithGraph();
+		} catch (Exception e) {
+			String message = String.format("Impossible d'ouvrir le fichier \"%s\".", file.getAbsolutePath());
+			Alert alert = new Alert(Alert.AlertType.ERROR, message);
+			alert.showAndWait();
+		}
+	}
+	
+	public void instanciateComboboxWithGraph() {
+		
+		for (Vertex vertex : graph.getVertices()) {
+			searchNode.getItems().add(vertex.getLabel());
+		}
+
+		for (int i = 0; i < graph.getVertices().size(); i++) {
+			niveauSearch.getItems().add(i);
+		}
+		niveauSearch.getSelectionModel().selectNext();
+
+		userInterface = new GraphUI();
+		userInterface.createUI(swingNode, graph);
+	}
+	
+	@FXML
+    void export(ActionEvent event) {		
+		try {
+			graph.export("export");
+		} catch (NullPointerException e) {
+			String message = "Vous ne pouvez pas exporter un graphique vide .";
+			Alert alert = new Alert(Alert.AlertType.ERROR, message);
+			alert.showAndWait();
+		}
+    }
+	
+	
 	@FXML
 	void search(ActionEvent event) {
 		String searchString = "mode=" + parcoursSearch.getSelectionModel().getSelectedItem().toString() + ","
@@ -238,4 +297,5 @@ public class GraphController {
 		circleLinkSearch.setFill(javafx.scene.paint.Color.RED);
 		circleFilterSearch.setFill(javafx.scene.paint.Color.RED);
 	}
+	
 }

@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import miage.graph.utils.Reader;
-
 public class Link {
 
 	private static final Logger LOGGER = Logger.getLogger(Link.class.getName());
